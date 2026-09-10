@@ -125,7 +125,7 @@ input[type=email], input[type=password], input[type=text], input[type=number] { 
 
   <div id="webAppPanel" class="notice small" style="margin-top:12px">
     <strong>Safari / iPad web app:</strong> <span id="webAppStatus">Checking browser mode…</span><br>
-    <span>App version <strong id="appVersionLabel">3.1.0</strong> • permanent question IDs enabled</span>
+    <span>App version <strong id="appVersionLabel">3.1.1</strong> • permanent question IDs enabled</span>
   </div>
 
   <div id="appUpdatePanel" class="notice small hide" style="margin-top:12px">
@@ -311,12 +311,18 @@ input[type=email], input[type=password], input[type=text], input[type=number] { 
     <div class="actions"><button id="savePersonalSettings" type="button" class="secondary">Save personal settings</button></div>
   </section>
 
+  <div class="topline" style="margin-top:16px">
+    <div>
+      <h2 style="margin-bottom:4px">Historical Metrics</h2>
+      <p id="metricsScopeLabel" class="small" style="margin:0">Current study-bank history.</p>
+    </div>
+  </div>
   <div class="statgrid">
-    <div class="stat"><b id="bankCount">0</b><span class="small">Incorrect bank</span></div>
-    <div class="stat"><b id="masteredCount">0</b><span class="small">Mastered from bank</span></div>
+    <div class="stat"><b id="bankCount">0</b><span class="small">Incorrect in scope</span></div>
+    <div class="stat"><b id="masteredCount">0</b><span class="small">Mastered in scope</span></div>
     <div class="stat"><b id="attemptCount">0</b><span class="small">Total attempts</span></div>
     <div class="stat"><b id="accuracy">—</b><span class="small">Lifetime accuracy</span></div>
-    <div class="stat"><b id="dueCount">0</b><span class="small">Retention due now</span></div>
+    <div class="stat"><b id="dueCount">0</b><span class="small">Retention due in scope</span></div>
   </div>
 
   <div class="grid" style="margin-top:16px">
@@ -371,7 +377,7 @@ input[type=email], input[type=password], input[type=text], input[type=number] { 
     <div class="topline">
       <div>
         <h2 style="margin-bottom:4px">What to Review</h2>
-        <p class="small" style="margin:0">General topics and slide ranges based only on your active Incorrect Bank.</p>
+        <p id="reviewBankScope" class="small" style="margin:0">General topics and slide ranges based only on the active Incorrect Bank for this study bank.</p>
       </div>
       <button id="refreshRecommendations" type="button" class="secondary" style="width:auto; min-width:150px">Refresh recommendations</button>
     </div>
@@ -379,7 +385,7 @@ input[type=email], input[type=password], input[type=text], input[type=number] { 
   </section>
 
   <details>
-    <summary>View Incorrect Bank</summary>
+    <summary id="incorrectBankSummary">View Incorrect Bank</summary>
     <div id="bankList" class="small"></div>
   </details>
 
@@ -421,7 +427,11 @@ input[type=email], input[type=password], input[type=text], input[type=number] { 
 
   <details>
     <summary>Reset progress</summary>
-    <button id="resetProgress" class="danger" style="margin-top:10px">Reset all progress</button>
+    <p id="resetScopeText" class="small">Reset only the active study bank, or reset all cloud-backed study progress for your account. Question-bank content and uploaded source material are never deleted by these controls.</p>
+    <div class="actions">
+      <button id="resetBankProgress" class="danger">Reset current bank only</button>
+      <button id="resetAllProgress" class="danger">Reset all study progress</button>
+    </div>
   </details>
 </section>
 
@@ -471,8 +481,8 @@ input[type=email], input[type=password], input[type=text], input[type=number] { 
 const HEART_BANK = window.IPAP_BUILTIN_HEART.bank;
 const DEFAULT_MASTER_STREAK = 3;
 let MASTER_STREAK = DEFAULT_MASTER_STREAK;
-const APP_VERSION = "3.1.0";
-const DATA_SCHEMA_VERSION = 7;
+const APP_VERSION = "3.2.0";
+const DATA_SCHEMA_VERSION = 8;
 const QUESTION_ID_SCHEME = "immutable-v1";
 const HEART_STORAGE_KEY = "heartQuizTrainerAdaptiveProgressV1";
 const PROGRAM_NAME = "IPAP Base Study Program";
@@ -517,6 +527,7 @@ const $ = id => document.getElementById(id);
 
 let active=[], index=0, correct=0, answered=0, missedThisQuiz=[], locked=false, lastSettings=null;
 let savedSession=null, quizInProgress=false, lastSavedAt=null;
+let sessionUpdatedAt=null, lastSessionFingerprint="null";
 let progress = {};
 let coverage = {};
 let storageAvailable = true;
@@ -595,6 +606,21 @@ function captureSession(){
   };
 }
 
+function currentSessionState(){
+  return quizInProgress ? captureSession() : savedSession;
+}
+function sessionFingerprint(session=currentSessionState()){
+  try{ return JSON.stringify(session ?? null); }
+  catch(e){ return session ? "session" : "null"; }
+}
+function refreshSessionRevision(nowIso=new Date().toISOString()){
+  const fp=sessionFingerprint();
+  if(fp!==lastSessionFingerprint){
+    sessionUpdatedAt=nowIso;
+    lastSessionFingerprint=fp;
+  }
+}
+
 function makeProgressPayload(includeExportTime=false){
   const payload={
     version:DATA_SCHEMA_VERSION,
@@ -609,7 +635,8 @@ function makeProgressPayload(includeExportTime=false){
     lastSavedAt:lastSavedAt || new Date().toISOString(),
     progress,
     coverage,
-    session:quizInProgress ? captureSession() : savedSession
+    session:currentSessionState(),
+    sessionUpdatedAt:sessionUpdatedAt || null
   };
   if(includeExportTime) payload.exportedAt=new Date().toISOString();
   return payload;
@@ -686,6 +713,7 @@ function persistMigratedState(){
   if(!storageAvailable) return;
   try{
     lastSavedAt=new Date().toISOString();
+    refreshSessionRevision(lastSavedAt);
     localStorage.setItem(STORAGE_KEY,JSON.stringify(makeProgressPayload(false)));
   }catch(e){
     storageAvailable=false;
@@ -693,7 +721,7 @@ function persistMigratedState(){
 }
 
 function loadProgress(){
-  progress={}; coverage={}; savedSession=null; lastSavedAt=null; storageAvailable=true;
+  progress={}; coverage={}; savedSession=null; lastSavedAt=null; sessionUpdatedAt=null; lastSessionFingerprint="null"; storageAvailable=true;
   try{
     const raw=localStorage.getItem(STORAGE_KEY);
     if(raw){
@@ -720,6 +748,11 @@ function loadProgress(){
         progress=migrated.progress;
         coverage=migrated.coverage;
         savedSession=migrated.session;
+        // Session state has its own revision clock. For legacy payloads, only an
+        // existing session inherits the payload save time; a missing/null legacy
+        // session is not treated as an authoritative deletion tombstone.
+        sessionUpdatedAt=parsed.sessionUpdatedAt || (savedSession ? (parsed.lastSavedAt || parsed.exportedAt || null) : null);
+        lastSessionFingerprint=sessionFingerprint(savedSession);
         if(migrated.changed) persistMigratedState();
       }
     }
@@ -819,13 +852,13 @@ function base64ToBytes(base64){
 
 function makeTransferCode(){
   const json=JSON.stringify(makeProgressPayload(true));
-  return "IPAP6:"+bytesToBase64(new TextEncoder().encode(json));
+  return "IPAP7:"+bytesToBase64(new TextEncoder().encode(json));
 }
 
 function parseTransferCode(code){
   const trimmed=String(code||"").trim();
   if(!trimmed) throw new Error("Empty transfer code.");
-  if(trimmed.startsWith("IPAP6:") || trimmed.startsWith("IPAP5:") || trimmed.startsWith("IPAP4:") || trimmed.startsWith("IPAP3:")){
+  if(trimmed.startsWith("IPAP7:") || trimmed.startsWith("IPAP6:") || trimmed.startsWith("IPAP5:") || trimmed.startsWith("IPAP4:") || trimmed.startsWith("IPAP3:")){
     const json=new TextDecoder().decode(base64ToBytes(trimmed.slice(6)));
     return JSON.parse(json);
   }
@@ -854,6 +887,7 @@ function validateIncomingPayload(parsed){
     progress:migrated.progress,
     coverage:migrated.coverage,
     session:migrated.session,
+    sessionUpdatedAt:parsed.sessionUpdatedAt || (migrated.session ? (parsed.lastSavedAt || parsed.exportedAt || null) : null),
     exportedAt:parsed.exportedAt || parsed.lastSavedAt || null
   };
 }
@@ -866,6 +900,9 @@ function applyImportedPayload(parsed,sourceLabel="transfer"){
   progress=data.progress;
   coverage=data.coverage;
   savedSession=data.session;
+  sessionUpdatedAt=data.sessionUpdatedAt || null;
+  // Keep the previous fingerprint until saveProgress so an explicit import is
+  // recorded as a fresh authoritative session state/tombstone on this device.
   quizInProgress=false;
   active=[];
   index=0; correct=0; answered=0; missedThisQuiz=[]; locked=false; lastSettings=null;
@@ -1144,8 +1181,15 @@ function renderReviewRecommendations(){
   }).join("");
 }
 
+function historicalMetricQuestions(){
+  const selectedSection=$("day")?.value || "All";
+  return selectedSection==="All" ? ALL : ALL.filter(q=>q.day===selectedSection);
+}
 function updateLifetimeUI(){
-  const vals=Object.values(progress);
+  // Historical metrics follow the selected section/day. The Incorrect Bank list
+  // and What to Review remain bank-wide and are rendered separately below.
+  const metricQuestions=historicalMetricQuestions();
+  const vals=metricQuestions.map(q=>statFor(q.id));
   const bank=vals.filter(s=>s.inBank).length;
   const mastered=vals.filter(s=>s.mastered).length;
   const attempts=vals.reduce((n,s)=>n+(s.attempts||0),0);
@@ -1154,7 +1198,12 @@ function updateLifetimeUI(){
   $("masteredCount").textContent=mastered;
   $("attemptCount").textContent=attempts;
   $("accuracy").textContent=attempts ? Math.round(corr/attempts*100)+"%" : "—";
-  if($("dueCount")) $("dueCount").textContent=ALL.filter(q=>retentionDue(statFor(q.id))).length;
+  if($("dueCount")) $("dueCount").textContent=metricQuestions.filter(q=>retentionDue(statFor(q.id))).length;
+  if($("metricsScopeLabel")){
+    const selectedSection=$("day")?.value || "All";
+    const scope=selectedSection==="All" ? `all ${ALL.length} questions` : `${selectedSection} questions`;
+    $("metricsScopeLabel").textContent=`${CURRENT_BANK_META.name} • lifetime history for ${scope}.`;
+  }
   renderBankList();
   renderRemovedList();
   renderReviewRecommendations();
@@ -1496,7 +1545,9 @@ function finish(){
 
 function startBank(){
   const settings={
-    day:$("day").value, order:$("order").value, source:$("source").value,
+    // Incorrect Bank remediation is scoped to the active subject bank, not the
+    // currently selected day/section. Order/source filters still apply.
+    day:"All", order:$("order").value, source:$("source").value,
     size:Number($("size").value), mode:"Incorrect"
   };
   lastSettings=settings;
@@ -1881,6 +1932,11 @@ function renderBankSelector(){
 }
 function updateActiveBankUI(){
   if($("activeBankIntro")) $("activeBankIntro").textContent=`${ALL.length} questions in the active ${CURRENT_BANK_META.name} study bank.`;
+  if($("reviewBankScope")) $("reviewBankScope").textContent=`General topics and slide ranges based on your entire ${CURRENT_BANK_META.name} Incorrect Bank. Day/section filters do not narrow this review list.`;
+  if($("incorrectBankSummary")) $("incorrectBankSummary").textContent=`View ${CURRENT_BANK_META.name} Incorrect Bank`;
+  if($("resetBankProgress")) $("resetBankProgress").textContent=`Reset ${CURRENT_BANK_META.name} progress only`;
+  if($("resetScopeText")) $("resetScopeText").textContent=`Reset ${CURRENT_BANK_META.name} only, or reset all cloud-backed study progress for this account. Other bank content, source files, and account settings are not deleted.`;
+  updateLifetimeUI();
   if($("activeBankSummary")){
     const access=CURRENT_BANK_META.kind==="builtin" ? "Built-in core • read-only content" :
       CURRENT_BANK_META.kind==="local" ? "Personal • local to this browser" :
@@ -1908,6 +1964,7 @@ async function activateBankByKey(key,{syncCloud=true,saveCurrent=true,rememberSe
     if(currentUser && sbClient && CURRENT_BANK_META.kind!=="local") await flushCloudProgressSave();
   }
   quizInProgress=false; active=[]; index=0; correct=0; answered=0; missedThisQuiz=[]; locked=false; lastSettings=null; savedSession=null;
+  sessionUpdatedAt=null; lastSessionFingerprint="null";
   CURRENT_BANK_META={...entry.meta};
   BANK=entry.package.bank;
   SLIDE_OFFSET=entry.package.slideOffset || {};
@@ -2162,6 +2219,33 @@ function mergeCoverageObjects(localCoverage,remoteCoverage){
   }
   return out;
 }
+function resolveMergedSession(localPayload,remotePayload){
+  const localSession=Object.prototype.hasOwnProperty.call(localPayload||{},"session") ? localPayload.session : undefined;
+  const remoteSession=Object.prototype.hasOwnProperty.call(remotePayload||{},"session") ? remotePayload.session : undefined;
+
+  // New payloads use a dedicated session revision clock. Legacy payloads may
+  // borrow lastSavedAt only when they actually contain a session. A legacy null
+  // has no authority to erase an unfinished quiz merely because another field
+  // caused the payload to be saved more recently.
+  const localTs=isoMs(localPayload?.sessionUpdatedAt) || (localSession ? isoMs(localPayload?.lastSavedAt||localPayload?.exportedAt) : 0);
+  const remoteTs=isoMs(remotePayload?.sessionUpdatedAt) || (remoteSession ? isoMs(remotePayload?.lastSavedAt||remotePayload?.exportedAt) : 0);
+
+  let source;
+  if(localTs>remoteTs) source=localPayload;
+  else if(remoteTs>localTs) source=remotePayload;
+  else if(localSession && !remoteSession) source=localPayload;
+  else if(remoteSession && !localSession) source=remotePayload;
+  else{
+    const lt=isoMs(localPayload?.lastSavedAt||localPayload?.exportedAt);
+    const rt=isoMs(remotePayload?.lastSavedAt||remotePayload?.exportedAt);
+    source=lt>=rt ? localPayload : remotePayload;
+  }
+
+  const session=Object.prototype.hasOwnProperty.call(source||{},"session") ? (source.session ?? null) : null;
+  const sourceTs=isoMs(source?.sessionUpdatedAt) || (session ? isoMs(source?.lastSavedAt||source?.exportedAt) : 0);
+  return {session,sessionUpdatedAt:sourceTs ? new Date(sourceTs).toISOString() : null};
+}
+
 function mergeProgressPayloads(localPayload,remotePayload){
   if(!remotePayload) return localPayload;
   if(!localPayload) return remotePayload;
@@ -2172,6 +2256,7 @@ function mergeProgressPayloads(localPayload,remotePayload){
   }
   const newer=lt>=rt ? localPayload : remotePayload;
   const older=lt>=rt ? remotePayload : localPayload;
+  const mergedSession=resolveMergedSession(localPayload,remotePayload);
   return {
     ...older,...newer,
     version:Math.max(Number(localPayload.version)||0,Number(remotePayload.version)||0,DATA_SCHEMA_VERSION),
@@ -2179,9 +2264,8 @@ function mergeProgressPayloads(localPayload,remotePayload){
     questionIdScheme:QUESTION_ID_SCHEME,
     progress:progressMerged,
     coverage:mergeCoverageObjects(localPayload.coverage||{},remotePayload.coverage||{}),
-    // If the newer device completed/discarded a quiz, its explicit null must win;
-    // otherwise an older device could resurrect a stale in-progress session.
-    session:Object.prototype.hasOwnProperty.call(newer,"session") ? newer.session : (older.session||null),
+    session:mergedSession.session,
+    sessionUpdatedAt:mergedSession.sessionUpdatedAt,
     lastSavedAt:new Date(Math.max(lt,rt,Date.now())).toISOString()
   };
 }
@@ -2255,6 +2339,8 @@ function applyCloudProgressPayload(payload){
   progress=data.progress; coverage=data.coverage;
   if(!preserveRunningQuiz){
     savedSession=data.session; quizInProgress=false; active=[];
+    sessionUpdatedAt=data.sessionUpdatedAt || payload.sessionUpdatedAt || null;
+    lastSessionFingerprint=sessionFingerprint(savedSession);
     index=0; correct=0; answered=0; missedThisQuiz=[]; locked=false; lastSettings=null;
   }
   lastSavedAt=payload.lastSavedAt || payload.exportedAt || new Date().toISOString();
@@ -2821,6 +2907,93 @@ $("removedList").addEventListener("click",e=>{
   updateCoverageStatus();
 });
 
+function resetLocalRuntimeState(){
+  progress={}; coverage={}; savedSession=null; quizInProgress=false; active=[];
+  index=0; correct=0; answered=0; missedThisQuiz=[]; locked=false; lastSettings=null;
+  lastSavedAt=null; sessionUpdatedAt=null; lastSessionFingerprint="null";
+}
+function removeLocalProgressKeysForAccount(accountId){
+  if(!accountId) return;
+  const prefix=USER_PROGRESS_PREFIX+accountId+"::";
+  try{
+    const keys=[];
+    for(let i=0;i<localStorage.length;i++){
+      const key=localStorage.key(i);
+      if(key && key.startsWith(prefix)) keys.push(key);
+    }
+    keys.forEach(key=>localStorage.removeItem(key));
+  }catch(e){}
+}
+async function settlePendingStudyWrites(){
+  clearTimeout(cloudSaveTimer); cloudSaveTimer=null;
+  if(cloudPushPromise){ try{ await cloudPushPromise; }catch(e){} }
+  try{ await flushReviewEvents(); }catch(e){}
+}
+async function resetCurrentBankProgress(){
+  const bankName=CURRENT_BANK_META.name;
+  const key=CURRENT_BANK_META.key;
+  if(!confirm(`Reset ONLY your ${bankName} progress?\n\nThis clears attempts, accuracy history, Incorrect Bank, mastery/retention state, coverage, removed-question state, and any saved ${bankName} quiz. Your other study banks and all question-bank content remain untouched.`)) return;
+  await settlePendingStudyWrites();
+  suppressCloudSave=true;
+  try{
+    if(currentUser && sbClient && CURRENT_BANK_META.kind!=="local"){
+      const {error}=await sbClient.rpc("reset_user_bank_progress",{p_bank_key:key});
+      if(error) throw error;
+      cloudProgressRevisionByBank.set(key,0);
+    }
+    // Prevent queued offline review events for this bank from being re-uploaded.
+    saveReviewEventQueue(loadReviewEventQueue().filter(row=>row?.bank_key!==key));
+    try{ localStorage.removeItem(STORAGE_KEY); }catch(e){}
+    resetLocalRuntimeState();
+    cloudSaveGeneration=0; cloudSavedGeneration=0;
+    updateLifetimeUI(); updateCoverageStatus(); showResumeSessionPanel(); updateStorageStatus();
+    if(currentUser && sbClient && CURRENT_BANK_META.kind!=="local") setCloudStatus(`${bankName} progress reset. Other study banks were not changed.`,"good");
+    alert(`${bankName} progress was reset. Other study banks were not changed.`);
+  }catch(e){
+    alert(`Could not reset ${bankName} progress: ${e.message || e}`);
+  }finally{
+    suppressCloudSave=false;
+  }
+}
+async function resetAllStudyProgress(){
+  const signedIn=!!(currentUser && sbClient);
+  const message=signedIn
+    ? "Reset ALL cloud-backed study progress for this account?\n\nThis clears progress, Incorrect Banks, mastery/retention state, coverage, removed-question state, review history, and saved quizzes across every cloud-backed/built-in bank in this account. Study-bank content, uploaded source material, sharing, and account settings remain. Local-only banks on this browser are not deleted."
+    : "Reset ALL study progress stored on this device?\n\nThis clears local progress and saved quizzes, but does not delete question-bank content.";
+  if(!confirm(message)) return;
+  await settlePendingStudyWrites();
+  suppressCloudSave=true;
+  try{
+    const accountId=currentUser?.id || null;
+    if(signedIn){
+      const {error}=await sbClient.rpc("reset_all_user_progress");
+      if(error) throw error;
+      removeLocalProgressKeysForAccount(accountId);
+      saveReviewEventQueue([]);
+      cloudProgressRevisionByBank.clear();
+    }else{
+      try{
+        const keys=[];
+        for(let i=0;i<localStorage.length;i++){
+          const key=localStorage.key(i);
+          if(key && (key===HEART_STORAGE_KEY || key.startsWith(CUSTOM_PROGRESS_PREFIX))) keys.push(key);
+        }
+        keys.forEach(key=>localStorage.removeItem(key));
+      }catch(e){}
+    }
+    resetLocalRuntimeState();
+    cloudSaveGeneration=0; cloudSavedGeneration=0;
+    STORAGE_KEY=storageKeyForBank(CURRENT_BANK_META);
+    updateLifetimeUI(); updateCoverageStatus(); showResumeSessionPanel(); updateStorageStatus();
+    if(signedIn) setCloudStatus("All account study progress reset. Study banks and account settings were preserved.","good");
+    alert(signedIn ? "All cloud-backed study progress for this account was reset. Study-bank content and settings were preserved." : "All study progress stored on this device was reset.");
+  }catch(e){
+    alert(`Could not reset all study progress: ${e.message || e}`);
+  }finally{
+    suppressCloudSave=false;
+  }
+}
+
 $("bankList").addEventListener("click",e=>{
   const toggle=e.target.closest("[data-toggle-answer]");
   if(toggle){
@@ -2853,14 +3026,11 @@ $("clearTransferCode").addEventListener("click",()=>{ $("transferCode").value=""
 $("resumeSession").addEventListener("click",restoreSavedSession);
 $("discardSession").addEventListener("click",discardSavedSession);
 $("importProgress").addEventListener("change",e=>{ const f=e.target.files && e.target.files[0]; if(f) importProgressFile(f); e.target.value=""; });
-$("resetProgress").addEventListener("click",()=>{
-  if(confirm("Reset ALL quiz history, Incorrect Bank entries, mastery streaks, removed questions, coverage, and any saved in-progress quiz?")){
-    progress={}; coverage={}; savedSession=null; quizInProgress=false; active=[];
-    saveProgress(); updateLifetimeUI(); updateCoverageStatus(); showResumeSessionPanel();
-  }
-});
+$("resetBankProgress")?.addEventListener("click",()=>resetCurrentBankProgress());
+$("resetAllProgress")?.addEventListener("click",()=>resetAllStudyProgress());
 
-["day","order","source"].forEach(id=>$(id).addEventListener("change",updateCoverageStatus));
+$("day")?.addEventListener("change",()=>{ updateCoverageStatus(); updateLifetimeUI(); });
+["order","source"].forEach(id=>$(id)?.addEventListener("change",updateCoverageStatus));
 
 function isStandaloneWebApp(){
   return window.matchMedia?.("(display-mode: standalone)").matches || window.navigator.standalone === true;
