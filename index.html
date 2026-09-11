@@ -118,7 +118,12 @@ input[type=email], input[type=password], input[type=text], input[type=number] { 
 .account-badge{display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:999px;border:1px solid var(--border);font-weight:800}.menu-email{padding:6px 8px 10px;border-bottom:1px solid var(--border);margin-bottom:6px;overflow-wrap:anywhere}
 body.auth-locked #setup>:not(h1):not(#accountCard){display:none!important} body.auth-locked #quiz,body.auth-locked #results,body.auth-locked #appTopBar{display:none!important} body.auth-locked #accountCard{max-width:620px;margin:12vh auto 0}.account-card.compact-hidden{display:none!important}
 .inline-tool-row{display:flex;gap:8px;align-items:end}.inline-tool-row>label{flex:1}.mini-button{width:auto;min-width:0;min-height:38px;padding:6px 10px;font-size:13px}.section-source-card{border:1px solid var(--border);border-radius:9px;padding:10px;margin-top:8px}.admin-user{border-top:1px solid var(--border);padding:10px 0}.admin-user:first-child{border-top:none}.admin-user .actions button{min-width:0}.scope-note{padding:8px 10px;border-radius:8px;background:var(--soft);margin-top:8px}.hidden-account-panel{display:none}.hidden-account-panel.revealed{display:block}.day-source-empty{color:var(--muted);padding:8px 0}.bank-selector-add{font-weight:700}.danger-zone{border:1px solid var(--bad);border-radius:10px;padding:10px;margin-top:10px}
+.field-label{display:block;font-weight:700;font-size:14px}.action-select{position:relative;margin-top:6px}.action-select-button{margin-top:0;width:100%;min-height:44px;background:var(--card);color:var(--text);border:1px solid var(--border);font-size:16px;font-weight:600;padding:8px 10px;display:flex;align-items:center;justify-content:space-between;gap:12px;text-align:left}.action-select-button:hover,.action-select-button:focus{border-color:var(--accent);outline:none}.action-select-menu{position:absolute;left:0;right:0;top:calc(100% + 6px);z-index:80;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:6px;box-shadow:0 12px 28px rgba(0,0,0,.18);max-height:min(420px,60vh);overflow:auto;-webkit-overflow-scrolling:touch}.action-select-menu button{margin:0;min-height:44px;width:100%;background:transparent;color:var(--text);border:1px solid transparent;text-align:left;font-weight:600;padding:9px 10px}.action-select-menu button:hover,.action-select-menu button:focus{border-color:var(--border);background:var(--soft);outline:none}.action-select-menu button[aria-selected="true"]{border-color:var(--accent)}.action-select-menu .action-select-add{margin-top:5px;padding-top:10px;border-top:1px solid var(--border);color:var(--accent);font-weight:800}.action-select-menu .action-select-add:hover,.action-select-menu .action-select-add:focus{border-top-color:var(--border)}
 @media(max-width:620px){.account-menu{right:12px;top:64px}.inline-tool-row{align-items:stretch;flex-direction:column}.inline-tool-row .mini-button{width:100%}}
+
+/* v3.4 simplified study flow */
+.section-help{color:var(--muted);font-size:14px;line-height:1.4}.quiet-details{margin-top:10px}.library-list{margin-top:10px}.library-item{display:flex;justify-content:space-between;gap:12px;align-items:center;border-top:1px solid var(--border);padding:10px 0}.library-item:first-child{border-top:none}.library-item-main{min-width:0}.library-item-name{font-weight:700;color:var(--text);overflow-wrap:anywhere}.library-item-actions{display:flex;gap:6px;flex-wrap:wrap}.library-item-actions button{width:auto;min-width:0}.modal-backdrop{position:fixed;inset:0;z-index:120;background:rgba(0,0,0,.48);display:flex;align-items:center;justify-content:center;padding:18px}.modal-card{width:min(620px,100%);max-height:88vh;overflow:auto;background:var(--card);color:var(--text);border:1px solid var(--border);border-radius:14px;padding:18px;box-shadow:0 18px 50px rgba(0,0,0,.3)}.modal-card-wide{width:min(820px,100%)}.modal-list{border:1px solid var(--border);border-radius:10px;padding:4px 10px;max-height:330px;overflow:auto}.modal-choice{display:flex;gap:9px;align-items:flex-start;padding:10px 2px;border-top:1px solid var(--border);font-weight:400}.modal-choice:first-child{border-top:none}.modal-choice input{width:20px;height:20px;margin:1px 0 0}.question-tool-wrap{position:relative;margin-top:8px;display:flex;justify-content:flex-end}.question-options-menu{position:absolute;right:0;top:44px;z-index:30;width:min(280px,90vw);background:var(--card);border:1px solid var(--border);border-radius:10px;padding:6px;box-shadow:0 12px 26px rgba(0,0,0,.18)}.question-options-menu button{margin:0 0 4px;width:100%;text-align:left;background:transparent;color:var(--text);border-color:transparent}.question-options-menu button:last-child{margin-bottom:0}.question-options-menu .danger{color:var(--bad)}.source-preview{margin-top:10px;border:1px solid var(--border);border-radius:9px;padding:10px}.review-flag{border-top:1px solid var(--border);padding:10px 0}.review-flag:first-child{border-top:none}.review-flag .actions{margin-top:8px}.review-flag .actions button{min-width:0}.tech-muted{display:none}.account-card h2{margin-bottom:4px}
+@media(max-width:620px){.library-item{align-items:flex-start;flex-direction:column}.library-item-actions{width:100%}.library-item-actions button{flex:1}.modal-backdrop{padding:10px}.question-options-menu{right:auto;left:0}.draft-choices{grid-template-columns:1fr}}
 
 </style>
 </head>
@@ -138,18 +143,22 @@ body.auth-locked #setup>:not(h1):not(#accountCard){display:none!important} body.
 </div>
 <section class="panel" id="setup">
   <h1>IPAP Base Study Program</h1>
-  <p class="small"><span id="activeBankIntro">400 questions from your four challenging slide-only quiz packs.</span> Adaptive repetition, an Incorrect Bank, instant feedback, source-slide notes, targeted review recommendations, previous/next navigation, bad-question removal, retention review, and automatic account-based cross-device synchronization are built in.</p>
+  <p class="section-help"><span id="activeBankIntro">Choose a bank, pick a day, and start studying.</span> Your progress syncs automatically when you are signed in.</p>
 
-  <div class="notice small">
-    <strong>Adaptive mastery:</strong> a missed question enters the Incorrect Bank. You can manually remove it at any time, or let it stay there until you answer it correctly
-    <strong><span id="masteryRequirementText">3</span> times in a row</strong>. Adaptive quizzes deliberately pull bank questions more often until they are mastered.<br><br>
-    <strong>Coverage rule:</strong> questions you answer correctly and that are not in the active Incorrect Bank will not recycle until every question in your selected test pool has been shown once. The only exception is an active Incorrect Bank question, which may repeat sooner so you can reach your selected mastery streak.
-  </div>
+  <details class="quiet-details">
+    <summary>How adaptive study works</summary>
+    <div class="notice small" style="margin-top:10px">
+      Missed questions enter your Incorrect Bank and are shown more often until you answer them correctly <strong><span id="masteryRequirementText">3</span> times in a row</strong>. Clean questions rotate through your selected pool before repeating.
+    </div>
+  </details>
 
-  <div id="webAppPanel" class="notice small" style="margin-top:12px">
-    <strong>Safari / iPad web app:</strong> <span id="webAppStatus">Checking browser mode…</span><br>
-    <span>App version <strong id="appVersionLabel">3.3.0</strong> • permanent question IDs enabled</span>
-  </div>
+  <details class="quiet-details">
+    <summary>App status</summary>
+    <div id="webAppPanel" class="notice small" style="margin-top:10px">
+      <span id="webAppStatus">Checking browser mode…</span><br>
+      <span>Version <strong id="appVersionLabel">3.4.0</strong></span>
+    </div>
+  </details>
 
   <div id="appUpdatePanel" class="notice small hide" style="margin-top:12px">
     <strong>Application update available.</strong> Your saved study history will remain on this device.
@@ -209,18 +218,38 @@ body.auth-locked #setup>:not(h1):not(#accountCard){display:none!important} body.
     </div>
   </section>
 
+  <section class="account-card" id="contentLibraryCard">
+    <div class="topline">
+      <div>
+        <h2 style="margin-bottom:4px">Content Library</h2>
+        <p class="section-help" style="margin:0">Upload course material once. You can choose it later when creating a study bank.</p>
+      </div>
+      <button id="refreshContentLibrary" type="button" class="secondary mini-button">Refresh</button>
+    </div>
+    <label style="margin-top:12px">Upload material
+      <input id="libraryMaterialFile" type="file" multiple accept=".pdf,.pptx,.docx,.txt,.md,application/pdf,application/vnd.openxmlformats-officedocument.presentationml.presentation,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain,text/markdown">
+    </label>
+    <div class="actions"><button id="uploadLibraryMaterial" type="button">Upload material</button></div>
+    <div id="contentLibraryList" class="library-list small"><p>No material uploaded yet.</p></div>
+  </section>
+
   <section class="account-card" id="bankLibraryCard">
     <div class="topline">
       <div>
-        <strong>Study Bank Library</strong><br>
-        <span class="small">The shared program mechanics stay locked; each account can have separate personal or shared study banks.</span>
+        <strong>Study Banks</strong><br>
+        <span class="section-help">Choose a subject to study, or use <strong>+ Add new bank</strong> to build one from your uploaded material.</span>
       </div>
-      <span class="core-lock">Core code is not editable from inside the app.</span>
+
     </div>
     <div class="bank-toolbar" style="margin-top:10px">
-      <label>Active study bank
-        <select id="bankSelector"></select>
-      </label>
+      <div>
+        <div class="field-label">Active study bank</div>
+        <div id="bankSelectorControl" class="action-select">
+          <button id="bankSelectorButton" type="button" class="action-select-button" aria-haspopup="listbox" aria-expanded="false"><span id="bankSelectorButtonText">Choose study bank</span><span aria-hidden="true">▾</span></button>
+          <div id="bankSelectorMenu" class="action-select-menu hide" role="listbox" aria-label="Study banks"></div>
+          <select id="bankSelector" class="hide" aria-hidden="true" tabindex="-1"></select>
+        </div>
+      </div>
       <div class="actions" style="margin-top:0">
         <button id="renameBank" type="button" class="secondary mini-button">Rename bank</button>
         <button id="refreshBanks" type="button" class="secondary mini-button">Refresh banks</button>
@@ -228,31 +257,19 @@ body.auth-locked #setup>:not(h1):not(#accountCard){display:none!important} body.
     </div>
     <div id="activeBankSummary" class="bank-meta small"></div>
 
-    <details>
-      <summary>Add or join a study bank</summary>
-      <p class="small">Create an empty cloud bank and build it from your own slides, import an existing IPAP Study Bank JSON package, or join a bank another user shared with you.</p>
-      <div class="content-studio">
-        <strong>Create a new personal bank</strong>
-        <div class="studio-grid" style="margin-top:8px">
-          <label>Bank name<input id="newBankName" type="text" placeholder="Renal Block"></label>
-          <label>Subject<input id="newBankSubject" type="text" placeholder="Renal"></label>
-        </div>
-        <label style="margin-top:8px">Description<input id="newBankDescription" type="text" placeholder="Optional description"></label>
-        <div class="actions">
-          <button id="createEmptyBank" type="button" class="secondary">Create empty private bank</button>
-          <button id="copyBuiltinToCloud" type="button" class="secondary hide">Make editable cloud copy of this built-in bank</button>
-        </div>
-      </div>
-      <label style="margin-top:12px">Import personal study bank
+    <details class="quiet-details">
+      <summary>Import or join a bank</summary>
+      <label style="margin-top:10px">Import an IPAP study-bank file
         <input id="importBankFile" type="file" accept=".json,application/json">
       </label>
       <div class="inline-input" style="margin-top:10px">
-        <label>Join shared bank with code
+        <label>Join a shared bank with a code
           <input id="joinBankCode" type="text" autocomplete="off" placeholder="Share code">
         </label>
         <button id="joinSharedBank" type="button" class="secondary">Join shared bank</button>
       </div>
-      <button id="uploadLocalBankToCloud" type="button" class="secondary hide" style="width:auto;margin-top:10px">Move this local bank to my cloud account</button>
+      <button id="copyBuiltinToCloud" type="button" class="secondary hide" style="width:auto;margin-top:10px">Make an editable copy of this built-in bank</button>
+      <button id="uploadLocalBankToCloud" type="button" class="secondary hide" style="width:auto;margin-top:10px">Move this local bank to my account</button>
     </details>
 
     <details id="bankSharingDetails">
@@ -261,32 +278,34 @@ body.auth-locked #setup>:not(h1):not(#accountCard){display:none!important} body.
     </details>
 
     <details id="materialsDetails">
-      <summary>Content Studio — upload slides & build this bank</summary>
-      <p class="small">For an editable cloud bank, upload your own source materials, select the files to use, generate source-grounded draft questions, review/edit them, and publish approved questions directly into the bank. Publishing content does not require a GitHub/developer update.</p>
-      <label>Add source material
-        <input id="bankMaterialFile" type="file" multiple accept=".pdf,.pptx,.docx,.txt,.md,application/pdf,application/vnd.openxmlformats-officedocument.presentationml.presentation,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain,text/markdown">
-      </label>
-      <div class="actions">
-        <button id="uploadBankMaterial" type="button" class="secondary">Upload selected material</button>
-        <button id="refreshMaterials" type="button" class="secondary">Refresh materials</button>
+      <summary>Build Study Content</summary>
+      <p class="section-help">Choose a day, assign the slides it covers, then generate questions. New questions are source-only and can be corrected while you study.</p>
+
+      <div class="content-studio">
+        <strong>Source material for this bank</strong>
+        <p class="section-help" style="margin:5px 0 8px">These are the files this bank can use.</p>
+        <div class="actions">
+          <button id="attachLibrarySources" type="button" class="secondary">Add material from Content Library</button>
+          <button id="refreshMaterials" type="button" class="secondary">Refresh</button>
+        </div>
+        <div id="materialList" class="small"></div>
       </div>
-      <div id="materialList" class="small"></div>
 
       <div class="content-studio" id="daySourceStudio">
-        <strong>Assign uploaded slides to the selected day</strong>
-        <p id="daySourceTarget" class="small" style="margin:5px 0 8px">Select a specific day/section above to assign source slides.</p>
+        <strong>Slides for this day</strong>
+        <p id="daySourceTarget" class="section-help" style="margin:5px 0 8px">Choose a specific day above first.</p>
         <div id="daySourceAssignments" class="small"></div>
         <div class="actions">
           <button id="assignSelectedSourcesToDay" type="button" class="secondary">Assign checked source(s) to this day</button>
         </div>
-        <p class="small" style="margin:8px 0 0">For PDF/PPTX sources, you can choose ranges such as <strong>1-75, 90-105</strong>. Assignments can be edited later. Changing an assignment never silently deletes published questions.</p>
+        <p class="section-help" style="margin:8px 0 0">Use ranges like <strong>1-75, 90-105</strong>. You can change them later without deleting the day.</p>
       </div>
 
       <div class="content-studio" id="generationStudio">
-        <strong>Generate draft questions for the selected day</strong>
-        <p class="small" style="margin:5px 0 10px">Generation is strict source-only: questions must be supported by the selected files. Drafts never enter the live bank until an editor approves and publishes them. Selected source content is sent securely through the configured server-side AI provider for generation; API usage may create provider charges for the app owner. PDF is preferred when diagrams/images matter.</p>
+        <strong>Generate questions</strong>
+        <p class="section-help" style="margin:5px 0 10px">Questions are created only from the slides assigned to this day. They become available to study after automated validation.</p>
         <div class="studio-grid">
-          <label>Draft question count
+          <label>Number of questions
             <select id="generationQuestionCount"><option value="10">10</option><option value="25" selected>25</option><option value="50">50</option></select>
           </label>
           <label>Question mix
@@ -299,13 +318,13 @@ body.auth-locked #setup>:not(h1):not(#accountCard){display:none!important} body.
             </select>
           </label>
         </div>
-        <div class="actions">
-          <button id="generateDraftQuestions" type="button">Generate draft questions</button>
-          <button id="refreshQuestionDrafts" type="button" class="secondary">Refresh drafts</button>
-          <button id="publishApprovedDrafts" type="button" class="secondary">Publish approved</button>
-        </div>
-        <div id="generationStatus" class="studio-status small">Select one or more uploaded source files above.</div>
-        <div id="questionDraftList" class="small"></div>
+        <div class="actions"><button id="generateDraftQuestions" type="button">Generate questions</button></div>
+        <div id="generationStatus" class="studio-status small">Choose a day and assign source slides first.</div>
+      </div>
+
+      <div class="content-studio" id="questionReviewStudio">
+        <div class="topline"><div><strong>Question Review Queue</strong><br><span class="section-help">Questions marked during quizzes appear here.</span></div><button id="refreshQuestionReviewQueue" type="button" class="secondary mini-button">Refresh</button></div>
+        <div id="questionReviewQueue" class="small"><p>No questions are waiting for review.</p></div>
       </div>
     </details>
   </section>
@@ -350,7 +369,7 @@ body.auth-locked #setup>:not(h1):not(#accountCard){display:none!important} body.
   <div class="topline" style="margin-top:16px">
     <div>
       <h2 style="margin-bottom:4px">Historical Metrics</h2>
-      <p id="metricsScopeLabel" class="small" style="margin:0">Current study-bank history.</p>
+      <p id="metricsScopeLabel" class="section-help" style="margin:0">How you have performed over time.</p>
     </div>
   </div>
   <div class="statgrid">
@@ -362,10 +381,15 @@ body.auth-locked #setup>:not(h1):not(#accountCard){display:none!important} body.
   </div>
 
   <div class="grid" style="margin-top:16px">
-    <label>Day / section
-      <select id="day"><option value="All">All days</option></select>
+    <div>
+      <div class="field-label">Day / section</div>
+      <div id="daySelectorControl" class="action-select">
+        <button id="daySelectorButton" type="button" class="action-select-button" aria-haspopup="listbox" aria-expanded="false"><span id="daySelectorButtonText">All days</span><span aria-hidden="true">▾</span></button>
+        <div id="daySelectorMenu" class="action-select-menu hide" role="listbox" aria-label="Days and sections"></div>
+        <select id="day" class="hide" aria-hidden="true" tabindex="-1"><option value="All">All days</option></select>
+      </div>
       <button id="renameDay" type="button" class="secondary mini-button hide">Rename selected day</button>
-    </label>
+    </div>
     <label>Question type
       <select id="order">
         <option value="Mixed">Mixed first + second order</option>
@@ -411,7 +435,7 @@ body.auth-locked #setup>:not(h1):not(#accountCard){display:none!important} body.
     <div class="topline">
       <div>
         <h2 style="margin-bottom:4px">What to Review</h2>
-        <p id="reviewBankScope" class="small" style="margin:0">General topics and slide ranges based only on the active Incorrect Bank for this study bank.</p>
+        <p id="reviewBankScope" class="section-help" style="margin:0">Topics you are struggling with most in this subject.</p>
       </div>
       <button id="refreshRecommendations" type="button" class="secondary" style="width:auto; min-width:150px">Refresh recommendations</button>
     </div>
@@ -425,7 +449,7 @@ body.auth-locked #setup>:not(h1):not(#accountCard){display:none!important} body.
 
   <details>
     <summary>View Removed Questions</summary>
-    <p class="small">Questions removed as bad are excluded from all future quizzes until you restore them.</p>
+    <p class="section-help">Questions you hide will stay out of your quizzes until you restore them.</p>
     <div id="removedList" class="small"></div>
   </details>
 
@@ -482,18 +506,25 @@ body.auth-locked #setup>:not(h1):not(#accountCard){display:none!important} body.
   </div>
   <div class="progress"><div id="bar"></div></div>
   <div class="small" id="meta"></div>
+  <div class="question-tool-wrap">
+    <button id="questionOptionsButton" type="button" class="secondary mini-button">Question options</button>
+    <div id="questionOptionsMenu" class="question-options-menu hide">
+      <button id="editQuestionNow" type="button">Edit question now</button>
+      <button id="markQuestionReview" type="button">Review later</button>
+      <button id="reportQuestion" type="button">Report question</button>
+      <button id="markQuestionInvalid" type="button" class="danger">Mark question invalid</button>
+    </div>
+  </div>
   <div class="qtext" id="qtext"></div>
   <div class="answers" id="answers"></div>
   <div id="feedback" class="feedback hide" aria-live="polite"></div>
   <div class="actions">
     <button id="prev" class="secondary" disabled>Previous question</button>
     <button id="next" disabled>Next question</button>
-    <button id="removeBadQuestion" type="button" class="danger">Remove bad question</button>
+    <button id="removeBadQuestion" type="button" class="secondary">Hide from my quizzes</button>
     <button id="quit" class="secondary">End quiz</button>
   </div>
-  <p class="small" style="margin-top:8px">
-    You can remove a bad question <strong>before or after answering it</strong>. It will be excluded from future quizzes and can be restored later under View Removed Questions.
-  </p>
+  <p class="section-help" style="margin-top:8px">Use Question options to fix or flag shared-bank questions. “Hide from my quizzes” only affects your own study history.</p>
 </section>
 
 <section class="panel hide" id="results">
@@ -510,9 +541,49 @@ body.auth-locked #setup>:not(h1):not(#accountCard){display:none!important} body.
     <button id="resultsBank" class="secondary">Study Incorrect Bank</button>
     <button id="home" class="secondary">Change settings</button>
   </div>
+  <div id="reviewMarkedAfterQuiz" class="notice small hide" style="margin-top:12px">
+    <strong id="reviewMarkedAfterQuizText">Questions marked for review.</strong>
+    <div class="actions"><button id="openReviewQueueAfterQuiz" type="button" class="secondary">Review flagged questions</button></div>
+  </div>
   <div id="missedReview" class="missed"></div>
 </section>
 </main>
+
+<div id="newBankModal" class="modal-backdrop hide" aria-hidden="true">
+  <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="newBankModalTitle">
+    <div class="topline"><h2 id="newBankModalTitle">Create a new study bank</h2><button id="cancelNewBankTop" type="button" class="secondary mini-button">Close</button></div>
+    <p class="section-help">Choose the material you want this bank to use.</p>
+    <div id="newBankSourceList" class="modal-list small"></div>
+    <label style="margin-top:12px">Bank name<input id="guidedBankName" type="text" placeholder="Respiratory"></label>
+    <label style="margin-top:10px">Description <span class="section-help">(optional)</span><input id="guidedBankDescription" type="text" placeholder="Optional"></label>
+    <div class="actions"><button id="createGuidedBank" type="button">Create bank</button><button id="cancelNewBank" type="button" class="secondary">Cancel</button></div>
+  </div>
+</div>
+
+<div id="attachSourceModal" class="modal-backdrop hide" aria-hidden="true">
+  <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="attachSourceModalTitle">
+    <div class="topline"><h2 id="attachSourceModalTitle">Add material to this bank</h2><button id="cancelAttachSourceTop" type="button" class="secondary mini-button">Close</button></div>
+    <p class="section-help">Choose material from your Content Library.</p>
+    <div id="attachSourceList" class="modal-list small"></div>
+    <div class="actions"><button id="confirmAttachSources" type="button">Add selected material</button><button id="cancelAttachSources" type="button" class="secondary">Cancel</button></div>
+  </div>
+</div>
+
+<div id="questionEditModal" class="modal-backdrop hide" aria-hidden="true">
+  <div class="modal-card modal-card-wide" role="dialog" aria-modal="true" aria-labelledby="questionEditTitle">
+    <div class="topline"><h2 id="questionEditTitle">Edit question</h2><button id="cancelQuestionEditTop" type="button" class="secondary mini-button">Close</button></div>
+    <label>Question<textarea id="editQuestionPrompt" rows="4"></textarea></label>
+    <div id="editQuestionChoices" class="draft-choices"></div>
+    <div class="studio-grid" style="margin-top:10px">
+      <label>Correct answer<select id="editQuestionCorrect"><option value="0">A</option><option value="1">B</option><option value="2">C</option><option value="3">D</option></select></label>
+      <label>Question type<select id="editQuestionOrder"><option value="First">First order</option><option value="Second">Second order</option></select></label>
+      <label>Day<select id="editQuestionDay"></select></label>
+      <label>Source slide/page<input id="editQuestionSourcePage" type="number" min="0"></label>
+    </div>
+    <div id="editQuestionSourceInfo" class="source-preview small"></div>
+    <div class="actions"><button id="saveQuestionEdit" type="button">Save correction</button><button id="openQuestionSource" type="button" class="secondary">Open source</button><button id="cancelQuestionEdit" type="button" class="secondary">Cancel</button></div>
+  </div>
+</div>
 
 <script src="./banks/heart-v1.js"></script>
 <script src="./supabase-config.js"></script>
@@ -521,8 +592,8 @@ body.auth-locked #setup>:not(h1):not(#accountCard){display:none!important} body.
 const HEART_BANK = window.IPAP_BUILTIN_HEART.bank;
 const DEFAULT_MASTER_STREAK = 3;
 let MASTER_STREAK = DEFAULT_MASTER_STREAK;
-const APP_VERSION = "3.3.0";
-const DATA_SCHEMA_VERSION = 9;
+const APP_VERSION = "3.4.0";
+const DATA_SCHEMA_VERSION = 10;
 const QUESTION_ID_SCHEME = "immutable-v1";
 const HEART_STORAGE_KEY = "heartQuizTrainerAdaptiveProgressV1";
 const PROGRAM_NAME = "IPAP Base Study Program";
@@ -989,11 +1060,14 @@ function allQuestionObjects(){
   return out;
 }
 let ALL = allQuestionObjects();
+function isGloballyInvalidQuestion(id){
+  return CURRENT_BANK_META.kind==="cloud" && Array.isArray(CURRENT_BANK_META.invalidQuestionIds) && CURRENT_BANK_META.invalidQuestionIds.includes(id);
+}
 
 function bankQuestions(filterDay="All",filterOrder="Mixed",filterSource="Random"){
   return ALL.filter(q=>{
     const s=statFor(q.id);
-    return !s.excluded && s.inBank &&
+    return !s.excluded && !isGloballyInvalidQuestion(q.id) && s.inBank &&
       (filterDay==="All" || q.day===filterDay) &&
       (filterOrder==="Mixed" || q.order===filterOrder) &&
       (filterSource==="Random" || q.quiz===filterSource);
@@ -1002,7 +1076,7 @@ function bankQuestions(filterDay="All",filterOrder="Mixed",filterSource="Random"
 function flattenPool(day,order,source){
   return ALL.filter(q=>{
     const s=statFor(q.id);
-    return !s.excluded &&
+    return !s.excluded && !isGloballyInvalidQuestion(q.id) &&
       (day==="All" || q.day===day) &&
       (order==="Mixed" || q.order===order) &&
       (source==="Random" || q.quiz===source);
@@ -1156,7 +1230,10 @@ function prepareQuestion(raw){
     shownAt:null,
     answered:false,
     selected:null,
-    wasCorrect:null
+    wasCorrect:null,
+    preAnswerStat:null,
+    reviewEventId:null,
+    questionVersion:raw.questionVersion||null
   };
 }
 
@@ -1339,7 +1416,7 @@ function startQuiz(custom=null, forcedMode=null){
     return;
   }
   active=pool.map(prepareQuestion);
-  index=0; correct=0; answered=0; missedThisQuiz=[]; locked=false;
+  index=0; correct=0; answered=0; missedThisQuiz=[]; questionFlagsThisQuiz=[]; locked=false;
   quizInProgress=true;
   savedSession=null;
   $("setup").classList.add("hide"); $("results").classList.add("hide"); $("quiz").classList.remove("hide");
@@ -1367,6 +1444,8 @@ function render(){
   const coverageText=baseForCoverage.length ? ` • Coverage ${seenForCoverage}/${baseForCoverage.length}` : "";
   $("meta").textContent=`${sectionDisplayName(item.day)} • ${item.order} order • ${item.quiz}${bankText}${coverageText}`;
   $("qtext").textContent=item.q;
+  closeQuestionOptions();
+  updateQuestionOptionsUI();
 
   $("prev").disabled=index===0;
   $("next").textContent=index===active.length-1 ? "Finish quiz" : "Next question";
@@ -1407,7 +1486,7 @@ function render(){
     $("feedback").innerHTML=
       `<strong>${item.wasCorrect ? "Correct." : "Incorrect."}</strong>` +
       (item.wasCorrect ? "" : `<br>Correct answer: ${correctAnswer}`) +
-      `<br><strong>Source:</strong> ${item.day}, <strong>slide ${slide}</strong> <span class="small">(PDF page ${item.page})</span>` +
+      `<br><strong>Source:</strong> ${escapeHtml(sectionDisplayName(item.day))}, <strong>slide ${slide}</strong>` +
       masteryMsg + retentionFeedbackHtml(currentStat);
   }else{
     $("feedback").className="feedback hide";
@@ -1425,6 +1504,7 @@ function answer(choiceIndex,button){
   answered++;
 
   const s=statFor(item.id);
+  item.preAnswerStat=JSON.parse(JSON.stringify({...defaultStat(),...s}));
   const buttons=[...$("answers").querySelectorAll("button")];
   buttons.forEach((b,i)=>{
     b.disabled=true;
@@ -1477,7 +1557,7 @@ function answer(choiceIndex,button){
   s.lastContentRevision=Number(CURRENT_BANK_META.contentRevision)||1;
   touchStat(s,s.lastAnsweredAt);
   const responseMs=item.shownAt ? Date.now()-isoMs(item.shownAt) : null;
-  queueReviewEvent(item,ok,s,responseMs);
+  item.reviewEventId=queueReviewEvent(item,ok,s,responseMs);
   saveProgress();
   updateLifetimeUI();
 
@@ -1493,7 +1573,7 @@ function answer(choiceIndex,button){
   $("feedback").innerHTML=
     `<strong>${ok ? "Correct." : "Incorrect."}</strong>` +
     (ok ? "" : `<br>Correct answer: ${correctAnswer}`) +
-    `<br><strong>Source:</strong> ${item.day}, <strong>slide ${slide}</strong> <span class="small">(PDF page ${item.page})</span>` +
+    `<br><strong>Source:</strong> ${escapeHtml(sectionDisplayName(item.day))}, <strong>slide ${slide}</strong>` +
     masteryMsg + retentionFeedbackHtml(s);
 
   $("scoreline").textContent=`Score: ${correct} / ${answered}`;
@@ -1566,6 +1646,12 @@ function finish(){
   $("missedCount").textContent=missedThisQuiz.length;
   $("bankAfter").textContent=Object.values(progress).filter(s=>s.inBank).length;
   $("retry").disabled=!missedThisQuiz.length;
+  const reviewNotice=$("reviewMarkedAfterQuiz");
+  if(reviewNotice){
+    const n=questionFlagsThisQuiz.length;
+    reviewNotice.classList.toggle("hide",!n);
+    if(n && $("reviewMarkedAfterQuizText")) $("reviewMarkedAfterQuizText").textContent=`${n} question${n===1?"":"s"} marked for review during this quiz.`;
+  }
 
   const r=$("missedReview"); r.innerHTML="";
   if(missedThisQuiz.length){
@@ -1689,6 +1775,10 @@ let cachedAccount=null;
 const cloudProgressRevisionByBank=new Map();
 let isCurrentUserAdmin=false;
 const materialInspectionCache=new Map();
+let contentLibraryAssets=[];
+let currentBankSources=[];
+let questionFlagsThisQuiz=[];
+let editingQuestionContext=null;
 
 function loadCachedAccount(){
   try{
@@ -1729,10 +1819,11 @@ function saveReviewEventQueue(rows){
   try{ localStorage.setItem(key,JSON.stringify(rows||[])); }catch(e){}
 }
 function queueReviewEvent(item,wasCorrect,s,responseMs){
-  if(!accountIdForCache()) return;
+  if(!accountIdForCache()) return null;
   const rows=loadReviewEventQueue();
+  const eventId=uuidv4();
   rows.push({
-    event_id:uuidv4(),
+    event_id:eventId,
     bank_key:CURRENT_BANK_META.key,
     bank_id_alias:CURRENT_BANK_META.bankId,
     question_id:item.id,
@@ -1741,6 +1832,7 @@ function queueReviewEvent(item,wasCorrect,s,responseMs){
     response_ms:Number.isFinite(responseMs)?Math.max(0,Math.round(responseMs)):null,
     app_version:APP_VERSION,
     bank_content_revision:Number(CURRENT_BANK_META.contentRevision)||1,
+    question_version:item.questionVersion||null,
     learning_state:{
       streak:s.streak,inBank:s.inBank,mastered:s.mastered,
       stabilityDays:s.retentionStabilityDays,difficulty:s.retentionDifficulty,
@@ -1750,6 +1842,7 @@ function queueReviewEvent(item,wasCorrect,s,responseMs){
   // Bound only the unsynced device queue; successful uploads remove events.
   saveReviewEventQueue(rows.slice(-5000));
   flushReviewEvents().catch(()=>{});
+  return eventId;
 }
 async function flushReviewEvents(){
   if(!sbClient || !currentUser) return;
@@ -1930,7 +2023,8 @@ function bankEntryFromCloud(row){
     key, bankId:pkg.bankId, compatibleBankIds:[pkg.bankId], name:pkg.name, subject:pkg.subject,
     description:pkg.description, kind:"cloud", permission:row.permission || "viewer", visibility:row.visibility,
     ownerId:row.owner_id, storageOwnerId:row.storage_owner_id || row.owner_id, dbId:row.id, shareCode:row.share_code || null,
-    contentRevision:Number(row.content_revision)||1, sections:Array.isArray(row.sections)?row.sections:[]
+    contentRevision:Number(row.content_revision)||1, sections:Array.isArray(row.sections)?row.sections:[],
+    invalidQuestionIds:Array.isArray(row.invalid_question_ids)?row.invalid_question_ids:[]
   }};
 }
 
@@ -1980,6 +2074,7 @@ function refreshFilterSelectors(){
       const add=document.createElement("option"); add.value="__ADD_DAY__"; add.textContent="+ Add new day"; daySel.appendChild(add);
     }
     daySel.value=[...daySel.options].some(o=>o.value===old && old!=="__ADD_DAY__")?old:"All";
+    renderDayActionMenu();
   }
   const orders=[...new Set(ALL.map(q=>q.order))];
   const sources=[...new Set(ALL.map(q=>q.quiz))];
@@ -1990,6 +2085,38 @@ function refreshFilterSelectors(){
   updateDayActionState();
   updateCoverageStatus();
 }
+function closeActionSelect(which){
+  const menu=$(which+"Menu"),button=$(which+"Button");
+  menu?.classList.add("hide");
+  button?.setAttribute("aria-expanded","false");
+}
+function toggleActionSelect(which){
+  const menu=$(which+"Menu"),button=$(which+"Button"); if(!menu||!button)return;
+  const opening=menu.classList.contains("hide");
+  closeActionSelect(which==="bankSelector"?"daySelector":"bankSelector");
+  menu.classList.toggle("hide",!opening); button.setAttribute("aria-expanded",opening?"true":"false");
+}
+function syncBankSelectorUI(){
+  const sel=$("bankSelector"),text=$("bankSelectorButtonText"); if(!sel||!text)return;
+  const opt=[...sel.options].find(o=>o.value===sel.value); text.textContent=opt?.textContent||CURRENT_BANK_META.name||"Choose study bank";
+  $("bankSelectorMenu")?.querySelectorAll("[data-bank-key]").forEach(b=>b.setAttribute("aria-selected",String(b.getAttribute("data-bank-key")===sel.value)));
+}
+function renderBankActionMenu(){
+  const sel=$("bankSelector"),menu=$("bankSelectorMenu"); if(!sel||!menu)return;
+  menu.innerHTML=[...sel.options].filter(o=>o.value!=="__ADD_BANK__").map(o=>`<button type="button" role="option" data-bank-key="${escapeHtml(o.value)}" aria-selected="${o.value===sel.value}">${escapeHtml(o.textContent||o.value)}</button>`).join("") + (currentUser&&sbClient?`<button type="button" class="action-select-add" data-add-bank="1">+ Add new bank</button>`:"");
+  syncBankSelectorUI();
+}
+function syncDaySelectorUI(){
+  const sel=$("day"),text=$("daySelectorButtonText"); if(!sel||!text)return;
+  const opt=[...sel.options].find(o=>o.value===sel.value); text.textContent=opt?.textContent||"All days";
+  $("daySelectorMenu")?.querySelectorAll("[data-day-key]").forEach(b=>b.setAttribute("aria-selected",String(b.getAttribute("data-day-key")===sel.value)));
+}
+function renderDayActionMenu(){
+  const sel=$("day"),menu=$("daySelectorMenu"); if(!sel||!menu)return;
+  menu.innerHTML=[...sel.options].filter(o=>o.value!=="__ADD_DAY__").map(o=>`<button type="button" role="option" data-day-key="${escapeHtml(o.value)}" aria-selected="${o.value===sel.value}">${escapeHtml(o.textContent||o.value)}</button>`).join("") + (canEditCurrentCloudBank()?`<button type="button" class="action-select-add" data-add-day="1">+ Add new day</button>`:"");
+  syncDaySelectorUI();
+}
+
 function renderBankSelector(){
   const sel=$("bankSelector"); if(!sel) return;
   const wanted=CURRENT_BANK_META.key;
@@ -2004,10 +2131,11 @@ function renderBankSelector(){
   });
   if(currentUser && sbClient){ const add=document.createElement("option"); add.value="__ADD_BANK__"; add.textContent="+ Add new bank"; add.className="bank-selector-add"; sel.appendChild(add); }
   sel.value=[...sel.options].some(o=>o.value===wanted) ? wanted : BUILTIN_HEART_BANK_KEY;
+  renderBankActionMenu();
 }
 function updateActiveBankUI(){
-  if($("activeBankIntro")) $("activeBankIntro").textContent=`${ALL.length} questions in the active ${CURRENT_BANK_META.name} study bank.`;
-  if($("reviewBankScope")) $("reviewBankScope").textContent=`General topics and slide ranges based on your entire ${CURRENT_BANK_META.name} Incorrect Bank. Day/section filters do not narrow this review list.`;
+  if($("activeBankIntro")) $("activeBankIntro").textContent=`${CURRENT_BANK_META.name} is selected with ${ALL.filter(q=>!isGloballyInvalidQuestion(q.id)).length} active questions.`;
+  if($("reviewBankScope")) $("reviewBankScope").textContent=`Topics you are struggling with most across ${CURRENT_BANK_META.name}.`;
   if($("incorrectBankSummary")) $("incorrectBankSummary").textContent=`View ${CURRENT_BANK_META.name} Incorrect Bank`;
   if($("resetBankProgress")) $("resetBankProgress").textContent=`Reset ${CURRENT_BANK_META.name} progress only`;
   if($("resetScopeText")) $("resetScopeText").textContent=`Reset ${CURRENT_BANK_META.name} only, or reset all cloud-backed study progress for this account. Other bank content, source files, and account settings are not deleted.`;
@@ -2021,7 +2149,7 @@ function updateActiveBankUI(){
       CURRENT_BANK_META.kind==="local" ? "Personal • local to this browser" :
       CURRENT_BANK_META.permission==="owner" ? `Owned by you • ${CURRENT_BANK_META.visibility.replaceAll("_"," ")}` :
       `Shared with you • ${CURRENT_BANK_META.permission}`;
-    $("activeBankSummary").innerHTML=`<strong>${escapeHtml(CURRENT_BANK_META.name)}</strong> — ${escapeHtml(CURRENT_BANK_META.subject)}<br>${ALL.length} questions • ${escapeHtml(access)}${CURRENT_BANK_META.description ? `<br>${escapeHtml(CURRENT_BANK_META.description)}` : ""}`;
+    $("activeBankSummary").innerHTML=`<strong>${escapeHtml(CURRENT_BANK_META.name)}</strong><br>${ALL.filter(q=>!isGloballyInvalidQuestion(q.id)).length} active questions${CURRENT_BANK_META.description ? ` • ${escapeHtml(CURRENT_BANK_META.description)}` : ""}`;
   }
   $("uploadLocalBankToCloud")?.classList.toggle("hide", !(CURRENT_BANK_META.kind==="local" && currentUser && sbClient));
   $("copyBuiltinToCloud")?.classList.toggle("hide", !(CURRENT_BANK_META.kind==="builtin" && currentUser && sbClient));
@@ -2029,10 +2157,10 @@ function updateActiveBankUI(){
   renderMaterialList([]);
   if(CURRENT_BANK_META.kind==="cloud"){
     refreshBankMaterials().catch(()=>{});
-    refreshQuestionDrafts().catch(()=>{});
+    refreshQuestionReviewQueue().catch(()=>{});
   }else{
-    renderQuestionDrafts([]);
     updateGenerationStudioAvailability();
+    if($("questionReviewQueue")) $("questionReviewQueue").innerHTML="<p>Question review is available for editable cloud banks.</p>";
   }
 }
 async function activateBankByKey(key,{syncCloud=true,saveCurrent=true,rememberSelection=true}={}){
@@ -2057,7 +2185,7 @@ async function activateBankByKey(key,{syncCloud=true,saveCurrent=true,rememberSe
   showResumeSessionPanel();
   updateStorageStatus();
   renderBankSelector();
-  if($("bankSelector")) $("bankSelector").value=key;
+  if($("bankSelector")){ $("bankSelector").value=key; syncBankSelectorUI(); }
   updateActiveBankUI();
   if(rememberSelection){
     userPreferences.lastBankKey=key;
@@ -2178,6 +2306,7 @@ async function handleAuthSession(session,event=""){
       loadProgress();
     }
     userPreferences={...DEFAULT_USER_PREFERENCES}; loadLocalPreferences(); applyPreferencesToUI(true);
+    contentLibraryAssets=[]; currentBankSources=[]; renderContentLibraryList();
     cloudBankLibrary.clear(); renderBankSelector(); updateActiveBankUI(); renderAuthUI();
     return;
   }
@@ -2189,6 +2318,7 @@ async function handleAuthSession(session,event=""){
   setCloudStatus("Loading your account…");
   await loadCloudPreferences();
   await loadCloudBanks();
+  await refreshContentLibrary().catch(e=>console.warn("Content Library load failed",e));
   await refreshAdminStatus().catch(()=>{ isCurrentUserAdmin=false; });
   renderAuthUI();
   renderBankSelector();
@@ -2460,23 +2590,26 @@ async function loadCloudBanks(){
   if(error) throw error;
   const ids=(metas||[]).map(x=>x.id);
   if(!ids.length){ saveCloudBankCache(); return; }
-  const [{data:contents,error:ce},{data:memberships,error:me},{data:codes,error:ae},{data:sections,error:se}]=await Promise.all([
+  const [{data:contents,error:ce},{data:memberships,error:me},{data:codes,error:ae},{data:sections,error:se},{data:invalidFlags,error:fe}]=await Promise.all([
     sbClient.from("bank_content").select("bank_id,bank_id_alias,bank_data,review_topics,slide_offset,schema_version,content_revision,updated_at").in("bank_id",ids),
     sbClient.from("bank_memberships").select("bank_id,role").eq("user_id",currentUser.id).in("bank_id",ids),
     sbClient.from("bank_access_codes").select("bank_id,share_code").in("bank_id",ids),
-    sbClient.from("bank_sections").select("id,bank_id,section_key,name,sort_order,source_assignments,updated_at").in("bank_id",ids).order("sort_order")
+    sbClient.from("bank_sections").select("id,bank_id,section_key,name,sort_order,source_assignments,updated_at").in("bank_id",ids).order("sort_order"),
+    sbClient.from("question_flags").select("bank_id,question_id").in("bank_id",ids).eq("flag_type","invalid").eq("status","open")
   ]);
-  if(ce) throw ce; if(me) throw me; if(se) throw se;
+  if(ce) throw ce; if(me) throw me; if(se) throw se; if(fe && fe.code!=="42P01") console.warn("Question flag load failed",fe);
   if(ae && ae.code!=="42501") console.warn("Share-code load failed",ae);
   const contentMap=new Map((contents||[]).map(x=>[x.bank_id,x]));
   const roleMap=new Map((memberships||[]).map(x=>[x.bank_id,x.role]));
   const codeMap=new Map((codes||[]).map(x=>[x.bank_id,x.share_code]));
   const sectionMap=new Map();
   for(const x of sections||[]){ if(!sectionMap.has(x.bank_id)) sectionMap.set(x.bank_id,[]); sectionMap.get(x.bank_id).push(x); }
+  const invalidMap=new Map();
+  for(const x of invalidFlags||[]){ if(!invalidMap.has(x.bank_id)) invalidMap.set(x.bank_id,[]); invalidMap.get(x.bank_id).push(x.question_id); }
   for(const m of metas||[]){
     const c=contentMap.get(m.id); if(!c) continue;
     const row={...m,bank_id_alias:c.bank_id_alias,bank_data:c.bank_data,review_topics:c.review_topics,slide_offset:c.slide_offset,content_schema_version:c.schema_version,content_revision:c.content_revision,
-      permission:m.owner_id===currentUser.id ? "owner" : (roleMap.get(m.id)||"viewer"), share_code:codeMap.get(m.id)||null,sections:sectionMap.get(m.id)||[]};
+      permission:m.owner_id===currentUser.id ? "owner" : (roleMap.get(m.id)||"viewer"), share_code:codeMap.get(m.id)||null,sections:sectionMap.get(m.id)||[],invalid_question_ids:invalidMap.get(m.id)||[]};
     const entry=bankEntryFromCloud(row); cloudBankLibrary.set(entry.key,entry);
   }
   saveCloudBankCache();
@@ -2693,176 +2826,225 @@ async function deletePersonalBank(){
 function canEditCurrentCloudBank(){ return CURRENT_BANK_META.kind==="cloud" && ["owner","editor"].includes(CURRENT_BANK_META.permission); }
 function materialPrefix(){ return CURRENT_BANK_META.kind==="cloud" ? `${CURRENT_BANK_META.storageOwnerId || CURRENT_BANK_META.ownerId}/${CURRENT_BANK_META.dbId}` : null; }
 function sanitizeFilename(name){ return String(name||"file").replace(/[^a-zA-Z0-9._-]+/g,"_").slice(-120); }
-async function uploadSelectedMaterials(){
-  if(!sbClient || !currentUser || !canEditCurrentCloudBank()) return alert("This bank is not editable by your account.");
-  const files=[...($("bankMaterialFile").files||[])]; if(!files.length) return alert("Choose one or more files first.");
-  const prefix=materialPrefix();
-  for(const file of files){
-    const path=`${prefix}/${Date.now()}-${randomToken(5)}-${sanitizeFilename(file.name)}`;
-    const {error}=await sbClient.storage.from("bank-materials").upload(path,file,{upsert:false});
-    if(error) return alert(`Upload failed for ${file.name}: ${error.message}`);
+function displayMaterialName(name){ return String(name||"").replace(/^\d+-[A-Z0-9]+-/i,""); }
+
+async function refreshContentLibrary(){
+  const holder=$("contentLibraryList");
+  if(!sbClient||!currentUser){ contentLibraryAssets=[]; if(holder) holder.innerHTML="<p>Sign in to use your Content Library.</p>"; return []; }
+  const {data:assets,error}=await sbClient.from("content_library_assets")
+    .select("id,owner_id,storage_path,name,file_ext,mime_type,size_bytes,unit,unit_count,inspection_status,inspection_error,created_at,updated_at")
+    .eq("owner_id",currentUser.id).order("created_at",{ascending:false});
+  if(error) throw error;
+  const ids=(assets||[]).map(x=>x.id);
+  let usage=[];
+  if(ids.length){
+    const {data,error:usageError}=await sbClient.from("bank_sources").select("asset_id,bank_id").in("asset_id",ids);
+    if(!usageError) usage=data||[];
   }
-  $("bankMaterialFile").value=""; await refreshBankMaterials(); alert("Source material uploaded.");
+  const countMap=new Map();
+  for(const row of usage||[]) countMap.set(String(row.asset_id),(countMap.get(String(row.asset_id))||0)+1);
+  contentLibraryAssets=(assets||[]).map(a=>({...a,usedByCount:countMap.get(String(a.id))||0}));
+  renderContentLibraryList();
+  return contentLibraryAssets;
+}
+function renderContentLibraryList(){
+  const holder=$("contentLibraryList"); if(!holder) return;
+  if(!currentUser){ holder.innerHTML="<p>Sign in to use your Content Library.</p>"; return; }
+  if(!contentLibraryAssets.length){ holder.innerHTML="<p>No material uploaded yet. Upload a PDF or PowerPoint to get started.</p>"; return; }
+  holder.innerHTML=contentLibraryAssets.map(a=>{
+    const count=a.unit_count!=null ? `${Number(a.unit_count)} ${escapeHtml(a.unit||"page")}${Number(a.unit_count)===1?"":"s"}` : (a.inspection_status==="failed"?"Could not inspect":"Ready to use");
+    const used=a.usedByCount ? ` • used by ${a.usedByCount} bank${a.usedByCount===1?"":"s"}` : "";
+    return `<div class="library-item" data-library-id="${escapeHtml(a.id)}"><div class="library-item-main"><div class="library-item-name">${escapeHtml(a.name)}</div><div class="section-help">${count}${used}</div></div><div class="library-item-actions"><button type="button" class="secondary mini-button" data-library-open="${escapeHtml(a.id)}">Open</button><button type="button" class="secondary mini-button" data-library-delete="${escapeHtml(a.id)}">Delete</button></div></div>`;
+  }).join("");
+}
+async function uploadLibraryMaterials(){
+  if(!sbClient||!currentUser) return alert("Sign in first.");
+  const input=$("libraryMaterialFile"); const files=[...(input?.files||[])];
+  if(!files.length) return alert("Choose one or more files first.");
+  const allowed=new Set(["pdf","pptx","docx","txt","md"]); const created=[];
+  for(const file of files){
+    const ext=(file.name.split(".").pop()||"").toLowerCase();
+    if(!allowed.has(ext)){ alert(`${file.name} is not supported. Use PDF, PPTX, DOCX, TXT, or MD.`); continue; }
+    const id=uuidv4(); const path=`library/${id}/${sanitizeFilename(file.name)}`;
+    const row={id,owner_id:currentUser.id,storage_path:path,name:file.name,file_ext:ext,mime_type:file.type||"",size_bytes:file.size,inspection_status:"pending",updated_at:new Date().toISOString()};
+    const {error:metaError}=await sbClient.from("content_library_assets").insert(row);
+    if(metaError){ alert(`Could not prepare ${file.name}: ${metaError.message}`); continue; }
+    const {error:uploadError}=await sbClient.storage.from("bank-materials").upload(path,file,{upsert:false});
+    if(uploadError){
+      await sbClient.rpc("delete_library_asset",{p_asset_id:id}).catch(()=>{});
+      alert(`Upload failed for ${file.name}: ${uploadError.message}`); continue;
+    }
+    created.push(id);
+  }
+  if(input) input.value="";
+  for(let i=0;i<created.length;i+=8){
+    const batch=created.slice(i,i+8);
+    const {data,error}=await sbClient.functions.invoke("generate-study-questions",{body:{action:"inspect_library",assetIds:batch}});
+    if(error) console.warn("Content inspection failed",error); else if(data?.error) console.warn(data.error);
+  }
+  await refreshContentLibrary();
+  if(created.length) alert(`${created.length} source file${created.length===1?"":"s"} added to your Content Library.`);
+}
+async function openStoragePath(path){
+  if(!path) return;
+  const popup=window.open("about:blank","_blank");
+  const {data,error}=await sbClient.storage.from("bank-materials").createSignedUrl(path,300);
+  if(error){ try{popup?.close();}catch(e){}; throw error; }
+  if(popup){ popup.opener=null; popup.location.href=data.signedUrl; }
+  else alert("Your browser blocked the material window. Allow pop-ups for this site, then try again.");
+}
+async function deleteLibraryAsset(assetId){
+  const asset=contentLibraryAssets.find(a=>String(a.id)===String(assetId)); if(!asset) return;
+  if(asset.usedByCount) return alert(`This material is being used by ${asset.usedByCount} study bank${asset.usedByCount===1?"":"s"}. Detach it from those banks before deleting it.`);
+  if(!confirm(`Delete ${asset.name} from your Content Library?`)) return;
+  const {error:removeError}=await sbClient.storage.from("bank-materials").remove([asset.storage_path]);
+  if(removeError) throw removeError;
+  const {error}=await sbClient.rpc("delete_library_asset",{p_asset_id:asset.id});
+  if(error) throw error;
+  await refreshContentLibrary();
+}
+function closeModal(id){ const el=$(id); if(el){ el.classList.add("hide"); el.setAttribute("aria-hidden","true"); } }
+function openModal(id){ const el=$(id); if(el){ el.classList.remove("hide"); el.setAttribute("aria-hidden","false"); } }
+function libraryChoiceHtml(a,attr,checked=false){
+  const count=a.unit_count!=null?`${Number(a.unit_count)} ${escapeHtml(a.unit||"page")}${Number(a.unit_count)===1?"":"s"}`:"Ready to use";
+  return `<label class="modal-choice"><input type="checkbox" ${attr}="${escapeHtml(a.id)}" ${checked?"checked":""}><span><strong>${escapeHtml(a.name)}</strong><br><span class="section-help">${count}</span></span></label>`;
+}
+async function quickAddNewBank(){
+  if(!sbClient||!currentUser) return alert("Sign in first.");
+  await refreshContentLibrary();
+  const holder=$("newBankSourceList");
+  if(holder) holder.innerHTML=contentLibraryAssets.length ? contentLibraryAssets.map(a=>libraryChoiceHtml(a,"data-new-bank-asset")).join("") : '<p>Upload material to your Content Library first, then return here.</p>';
+  if($("guidedBankName")) $("guidedBankName").value="";
+  if($("guidedBankDescription")) $("guidedBankDescription").value="";
+  if($("createGuidedBank")) $("createGuidedBank").disabled=!contentLibraryAssets.length;
+  openModal("newBankModal"); setTimeout(()=>$("guidedBankName")?.focus(),50);
+}
+async function createGuidedBank(){
+  const name=String($("guidedBankName")?.value||"").trim();
+  const description=String($("guidedBankDescription")?.value||"").trim();
+  const assetIds=[...document.querySelectorAll("[data-new-bank-asset]:checked")].map(x=>x.getAttribute("data-new-bank-asset")).filter(Boolean);
+  if(!name) return alert("Enter a bank name.");
+  if(!assetIds.length) return alert("Choose at least one source from your Content Library.");
+  const btn=$("createGuidedBank"); if(btn) btn.disabled=true;
+  try{
+    const {data,error}=await sbClient.rpc("create_study_bank_from_assets",{p_name:name,p_subject:name,p_description:description,p_asset_ids:assetIds});
+    if(error) throw error;
+    const row=Array.isArray(data)?data[0]:data; const id=row?.bank_id||row;
+    closeModal("newBankModal");
+    await loadCloudBanks(); renderBankSelector();
+    const key=`cloud:${id}`; if(!cloudBankLibrary.has(key)) throw new Error("Bank was created but could not be loaded.");
+    await activateBankByKey(key,{syncCloud:false,saveCurrent:false});
+    alert(`${name} is ready. Use the Day menu and choose + Add new day to organize the source material.`);
+  }finally{ if(btn) btn.disabled=false; }
+}
+async function openAttachSourceModal(){
+  if(!canEditCurrentCloudBank()) return alert("Open a bank you own or can edit first.");
+  await refreshContentLibrary(); await refreshBankMaterials();
+  const attached=new Set(currentBankSources.filter(x=>x.assetId).map(x=>String(x.assetId)));
+  const choices=contentLibraryAssets.filter(a=>!attached.has(String(a.id)));
+  const holder=$("attachSourceList"); if(holder) holder.innerHTML=choices.length?choices.map(a=>libraryChoiceHtml(a,"data-attach-asset")).join(""):'<p>All of your uploaded material is already attached to this bank.</p>';
+  if($("confirmAttachSources")) $("confirmAttachSources").disabled=!choices.length;
+  openModal("attachSourceModal");
+}
+async function confirmAttachSources(){
+  const ids=[...document.querySelectorAll("[data-attach-asset]:checked")].map(x=>x.getAttribute("data-attach-asset")).filter(Boolean);
+  if(!ids.length) return alert("Choose at least one source.");
+  const {error}=await sbClient.rpc("attach_library_assets_to_bank",{p_bank_id:CURRENT_BANK_META.dbId,p_asset_ids:ids});
+  if(error) throw error;
+  closeModal("attachSourceModal"); await refreshBankMaterials(); await refreshContentLibrary();
 }
 async function refreshBankMaterials(){
-  if(!sbClient || !currentUser || CURRENT_BANK_META.kind!=="cloud"){ renderMaterialList([]); return; }
-  const {data,error}=await sbClient.storage.from("bank-materials").list(materialPrefix(),{limit:100,sortBy:{column:"name",order:"asc"}});
-  if(error){ renderMaterialList([],error.message); return; }
-  renderMaterialList((data||[]).filter(x=>x.name && x.name!==".emptyFolderPlaceholder"));
+  currentBankSources=[];
+  if(!sbClient||!currentUser||CURRENT_BANK_META.kind!=="cloud"){ renderMaterialList([]); return; }
+  const {data:links,error:linkError}=await sbClient.from("bank_sources").select("asset_id,created_at").eq("bank_id",CURRENT_BANK_META.dbId);
+  if(linkError) throw linkError;
+  const ids=(links||[]).map(x=>x.asset_id);
+  if(ids.length){
+    const {data:assets,error:assetError}=await sbClient.from("content_library_assets").select("id,storage_path,name,file_ext,unit,unit_count,size_bytes,inspection_status").in("id",ids);
+    if(assetError) throw assetError;
+    const linkMap=new Map((links||[]).map(x=>[String(x.asset_id),x]));
+    currentBankSources.push(...(assets||[]).map(a=>({kind:"library",assetId:a.id,path:a.storage_path,name:a.name,type:a.file_ext,unit:a.unit,count:a.unit_count,size:a.size_bytes,created_at:linkMap.get(String(a.id))?.created_at})));
+  }
+  // Keep legacy v3.1-v3.3 bank-specific uploads usable.
+  try{
+    const {data:legacy,error}=await sbClient.storage.from("bank-materials").list(materialPrefix(),{limit:100,sortBy:{column:"name",order:"asc"}});
+    if(!error) currentBankSources.push(...(legacy||[]).filter(x=>x.name&&x.name!==".emptyFolderPlaceholder").map(x=>({kind:"legacy",assetId:null,path:`${materialPrefix()}/${x.name}`,name:displayMaterialName(x.name),storedName:x.name,type:(x.name.split(".").pop()||"").toLowerCase(),unit:null,count:null})));
+  }catch(e){}
+  renderMaterialList(currentBankSources);
 }
-function displayMaterialName(name){ return String(name).replace(/^\d+-[A-Z0-9]+-/i,""); }
 function renderMaterialList(items,error=""){
   const holder=$("materialList"); if(!holder) return;
-  if(CURRENT_BANK_META.kind!=="cloud"){
-    holder.innerHTML="<p>Source-material storage is available for cloud personal/shared banks.</p>"; updateGenerationStudioAvailability(); renderDaySourceAssignments(); return;
-  }
-  if(error){ holder.innerHTML=`<p>Could not load materials: ${escapeHtml(error)}</p>`; updateGenerationStudioAvailability(); renderDaySourceAssignments(); return; }
-  if(!items.length){ holder.innerHTML="<p>No source materials uploaded for this bank.</p>"; updateGenerationStudioAvailability(); renderDaySourceAssignments(); return; }
-  holder.innerHTML=items.map(x=>`<div class="material-item"><span class="source-check">${canEditCurrentCloudBank()?`<input type="checkbox" data-generation-source="${escapeHtml(x.name)}" aria-label="Use ${escapeHtml(displayMaterialName(x.name))} for question generation">`:""}<span>${escapeHtml(displayMaterialName(x.name))}</span></span><span class="actions"><button type="button" class="secondary" data-open-material="${escapeHtml(x.name)}">Open</button>${canEditCurrentCloudBank()?`<button type="button" class="danger" data-delete-material="${escapeHtml(x.name)}">Delete</button>`:""}</span></div>`).join("");
-  updateGenerationStudioAvailability();
-  renderDaySourceAssignments();
+  if(CURRENT_BANK_META.kind!=="cloud"){ holder.innerHTML="<p>Open an editable cloud bank to build study content.</p>"; updateGenerationStudioAvailability(); renderDaySourceAssignments(); return; }
+  if(error){ holder.innerHTML=`<p>Could not load material: ${escapeHtml(error)}</p>`; return; }
+  if(!items.length){ holder.innerHTML="<p>No material is attached to this bank yet.</p>"; updateGenerationStudioAvailability(); renderDaySourceAssignments(); return; }
+  holder.innerHTML=items.map(x=>{
+    const count=x.count!=null?` • ${Number(x.count)} ${escapeHtml(x.unit||"page")}${Number(x.count)===1?"":"s"}`:"";
+    return `<div class="material-item"><span class="source-check">${canEditCurrentCloudBank()?`<input type="checkbox" data-generation-path="${escapeHtml(x.path)}" aria-label="Use ${escapeHtml(x.name)}">`:""}<span><strong>${escapeHtml(x.name)}</strong><span class="section-help">${count}</span></span></span><span class="actions"><button type="button" class="secondary mini-button" data-open-material-path="${escapeHtml(x.path)}">Open</button>${canEditCurrentCloudBank()&&x.kind==="library"?`<button type="button" class="secondary mini-button" data-detach-asset="${escapeHtml(x.assetId)}">Detach</button>`:""}${canEditCurrentCloudBank()&&x.kind==="legacy"?`<button type="button" class="secondary mini-button" data-delete-legacy="${escapeHtml(x.storedName||"")}">Delete</button>`:""}</span></div>`;
+  }).join("");
+  updateGenerationStudioAvailability(); renderDaySourceAssignments();
 }
-
+async function detachLibrarySource(assetId){
+  if(!canEditCurrentCloudBank()) return;
+  const row=currentBankSources.find(x=>String(x.assetId)===String(assetId));
+  if(!row) return;
+  if(!confirm(`Detach ${row.name} from ${CURRENT_BANK_META.name}?`)) return;
+  const {error}=await sbClient.rpc("detach_library_asset_from_bank",{p_bank_id:CURRENT_BANK_META.dbId,p_asset_id:assetId});
+  if(error) throw error;
+  await refreshBankMaterials(); await refreshContentLibrary();
+}
+async function deleteLegacyMaterial(name){
+  if(!canEditCurrentCloudBank()) return;
+  const {error}=await sbClient.storage.from("bank-materials").remove([`${materialPrefix()}/${name}`]);
+  if(error) throw error;
+  await refreshBankMaterials();
+}
 function updateGenerationStudioAvailability(){
-  const editable=!!(sbClient && currentUser && canEditCurrentCloudBank());
-  const section=selectedSectionMeta();
+  const editable=!!(sbClient&&currentUser&&canEditCurrentCloudBank()); const section=selectedSectionMeta();
   if($("generateDraftQuestions")) $("generateDraftQuestions").disabled=!(editable&&section);
-  if($("publishApprovedDrafts")) $("publishApprovedDrafts").disabled=!editable;
   if($("generationStatus")){
-    if(!editable) $("generationStatus").textContent=CURRENT_BANK_META.kind!=="cloud" ? "Content generation is available after you sign in and open an editable cloud bank." : "Your account has read-only access to this bank.";
-    else if(!section) $("generationStatus").textContent="Select a specific day/section before generating questions.";
+    if(!editable) $("generationStatus").textContent=CURRENT_BANK_META.kind!=="cloud"?"Open an editable cloud bank to generate questions.":"This bank is read-only for your account.";
+    else if(!section) $("generationStatus").textContent="Choose a specific day before generating questions.";
+    else if(!(section.source_assignments||[]).length) $("generationStatus").textContent=`Assign source slides to ${section.name} first.`;
   }
 }
 function selectedGenerationSourcePaths(){
   if(!canEditCurrentCloudBank()) return [];
-  return [...document.querySelectorAll("[data-generation-source]:checked")].map(el=>`${materialPrefix()}/${el.getAttribute("data-generation-source")}`);
+  return [...document.querySelectorAll("[data-generation-path]:checked")].map(el=>el.getAttribute("data-generation-path")).filter(Boolean);
 }
 function mixCounts(total,mix){
   if(mix==="first-only") return {first:total,second:0};
   if(mix==="second-only") return {first:0,second:total};
-  const firstPct=mix==="first-heavy"?0.7:mix==="second-heavy"?0.3:0.5;
-  const first=Math.round(total*firstPct);
-  return {first,second:total-first};
+  const firstPct=mix==="first-heavy"?0.7:mix==="second-heavy"?0.3:0.5; const first=Math.round(total*firstPct); return {first,second:total-first};
 }
 async function generateDraftQuestionsFromSources(){
-  if(!sbClient || !currentUser || !canEditCurrentCloudBank()) return alert("Open a cloud bank you own or can edit first.");
-  const section=selectedSectionMeta();
-  if(!section) return alert("Select a specific day/section before generating questions.");
+  if(!sbClient||!currentUser||!canEditCurrentCloudBank()) return alert("Open a cloud bank you own or can edit first.");
+  const section=selectedSectionMeta(); if(!section) return alert("Choose a specific day first.");
   const assignments=Array.isArray(section.source_assignments)?section.source_assignments:[];
-  let sourcePaths=[],sourceRanges=[];
-  if(assignments.length){
-    sourcePaths=assignments.map(a=>a.path).filter(Boolean);
-    sourceRanges=assignments.map(a=>({path:a.path,ranges:Array.isArray(a.ranges)?a.ranges:[]}));
-  }else{
-    sourcePaths=selectedGenerationSourcePaths();
-    if(!sourcePaths.length) return alert("Assign uploaded source slides to this day first, or check one or more sources above.");
-    if(!confirm(`${section.name} has no saved slide assignments. Generate from the full checked source file(s) and attach the drafts to ${section.name}?`)) return;
-    sourceRanges=sourcePaths.map(path=>({path,ranges:[]}));
-  }
-  const total=Number($("generationQuestionCount")?.value)||25;
-  const mix=$("generationQuestionMix")?.value||"balanced";
-  const counts=mixCounts(total,mix);
-  $("generateDraftQuestions").disabled=true;
-  if($("generationStatus")) $("generationStatus").textContent=`Generating ${total} ${section.name} drafts (${counts.first} first order / ${counts.second} second order)…`;
+  if(!assignments.length) return alert(`Assign source slides to ${section.name} before generating questions.`);
+  const sourcePaths=assignments.map(a=>a.path).filter(Boolean);
+  const sourceRanges=assignments.map(a=>({path:a.path,ranges:Array.isArray(a.ranges)?a.ranges:[]}));
+  if(!sourcePaths.length) return alert("This day does not have usable source material assigned yet.");
+  const total=Number($("generationQuestionCount")?.value)||25; const mix=$("generationQuestionMix")?.value||"balanced"; const counts=mixCounts(total,mix);
+  const btn=$("generateDraftQuestions"); if(btn) btn.disabled=true;
+  if($("generationStatus")) $("generationStatus").textContent=`Creating ${total} questions for ${section.name}…`;
   try{
-    const {data,error}=await sbClient.functions.invoke("generate-study-questions",{body:{
-      bankId:CURRENT_BANK_META.dbId,sectionKey:section.section_key,sourcePaths,sourceRanges,
-      questionCount:total,firstOrderCount:counts.first,secondOrderCount:counts.second
-    }});
-    if(error) throw error;
-    if(data?.error) throw new Error(data.error);
-    if($("generationStatus")) $("generationStatus").textContent=`Generation complete: ${Number(data?.draftCount)||0} drafts for ${section.name} are ready for review.`;
-    await refreshQuestionDrafts();
-  }finally{
-    $("generateDraftQuestions").disabled=false;
-    updateGenerationStudioAvailability();
-  }
+    const key=CURRENT_BANK_META.key; const sectionKey=section.section_key;
+    const {data,error}=await sbClient.functions.invoke("generate-study-questions",{body:{bankId:CURRENT_BANK_META.dbId,sectionKey,sourcePaths,sourceRanges,questionCount:total,firstOrderCount:counts.first,secondOrderCount:counts.second}});
+    if(error) throw error; if(data?.error) throw new Error(data.error);
+    const published=Number(data?.publishedCount)||0;
+    await loadCloudBanks(); await activateBankByKey(key,{syncCloud:false,saveCurrent:false});
+    if($("day")){ $("day").value=sectionKey; syncDaySelectorUI(); updateLifetimeUI(); updateCoverageStatus(); updateDayActionState(); renderDaySourceAssignments(); }
+    if($("generationStatus")) $("generationStatus").textContent=`${published} new question${published===1?"":"s"} added to ${sectionDisplayName(sectionKey)} and ready to study.`;
+    alert(`${published} question${published===1?"":"s"} added to ${sectionDisplayName(sectionKey)}.`);
+  }finally{ if(btn) btn.disabled=false; updateGenerationStudioAvailability(); }
 }
-async function refreshQuestionDrafts(){
-  const holder=$("questionDraftList");
-  if(!holder) return;
-  if(!sbClient || !currentUser || CURRENT_BANK_META.kind!=="cloud" || !canEditCurrentCloudBank()){ holder.innerHTML=""; updateGenerationStudioAvailability(); return; }
-  const [{data:drafts,error:de},{data:jobs,error:je}]=await Promise.all([
-    sbClient.from("question_drafts").select("id,status,section_key,source_ranges,order_type,prompt,choices,correct_index,source_name,source_page,source_basis,question_id,created_at").eq("bank_id",CURRENT_BANK_META.dbId).neq("status","published").order("created_at",{ascending:false}).limit(200),
-    sbClient.from("generation_jobs").select("id,status,section_key,source_ranges,requested_count,error_message,created_at,completed_at").eq("bank_id",CURRENT_BANK_META.dbId).order("created_at",{ascending:false}).limit(5)
-  ]);
-  if(de) throw de; if(je) console.warn("Could not load generation jobs",je);
-  const latest=(jobs||[])[0];
-  if(latest && $("generationStatus")){
-    const extra=latest.status==="failed" && latest.error_message ? ` — ${latest.error_message}` : "";
-    $("generationStatus").textContent=`Latest generation: ${latest.status} • requested ${latest.requested_count}${extra}`;
-  }
-  renderQuestionDrafts(drafts||[]);
-}
-function renderQuestionDrafts(drafts){
-  const holder=$("questionDraftList"); if(!holder) return;
-  if(!drafts.length){ holder.innerHTML='<p style="margin-top:10px">No unpublished drafts. Generate questions from selected source files above.</p>'; return; }
-  holder.innerHTML=`<div style="margin-top:12px"><strong>${drafts.length} unpublished draft${drafts.length===1?"":"s"}</strong></div>`+drafts.map((d,idx)=>{
-    const choices=Array.isArray(d.choices)?d.choices:["","","",""];
-    return `<article class="draft-card" data-draft-id="${escapeHtml(d.id)}">
-      <div class="topline"><strong>Draft ${idx+1}</strong><span><span class="pill">${escapeHtml(d.status)}</span>${d.section_key?`<span class="pill">${escapeHtml(sectionDisplayName(d.section_key))}</span>`:""}<span class="pill">${escapeHtml(d.order_type)} order</span><span class="pill">${escapeHtml(d.source_name||"source")} • ${d.source_page?`slide/page ${Number(d.source_page)}`:"location unconfirmed"}</span></span></div>
-      <label>Question<textarea data-draft-field="prompt">${escapeHtml(d.prompt||"")}</textarea></label>
-      <div class="draft-choices">${choices.slice(0,4).map((c,i)=>`<label>${String.fromCharCode(65+i)}<input data-choice-index="${i}" value="${escapeHtml(c)}"></label>`).join("")}</div>
-      <div class="studio-grid" style="margin-top:8px">
-        <label>Correct answer<select data-draft-field="correct_index">${[0,1,2,3].map(i=>`<option value="${i}" ${Number(d.correct_index)===i?"selected":""}>${String.fromCharCode(65+i)}</option>`).join("")}</select></label>
-        <label>Order<select data-draft-field="order_type"><option value="First" ${d.order_type==="First"?"selected":""}>First</option><option value="Second" ${d.order_type==="Second"?"selected":""}>Second</option></select></label>
-        <label>Source slide/page<input type="number" min="0" data-draft-field="source_page" value="${Number(d.source_page)||0}"></label>
-      </div>
-      <p class="small"><strong>Source support:</strong> ${escapeHtml(d.source_basis||"Not supplied")}</p>
-      <div class="actions"><button type="button" class="secondary" data-save-draft>Save edits</button><button type="button" data-approve-draft>Approve</button><button type="button" class="danger" data-reject-draft>Reject</button></div>
-    </article>`;
-  }).join("");
-}
-function draftPatchFromCard(card){
-  const choices=[...card.querySelectorAll("[data-choice-index]")].sort((a,b)=>Number(a.dataset.choiceIndex)-Number(b.dataset.choiceIndex)).map(x=>x.value.trim());
-  const prompt=card.querySelector('[data-draft-field="prompt"]')?.value.trim()||"";
-  const correct_index=Number(card.querySelector('[data-draft-field="correct_index"]')?.value);
-  const order_type=card.querySelector('[data-draft-field="order_type"]')?.value||"First";
-  const source_page=Math.max(0,Number(card.querySelector('[data-draft-field="source_page"]')?.value)||0);
-  if(!prompt || choices.some(x=>!x)) throw new Error("Question and all four answer choices are required.");
-  if(!Number.isInteger(correct_index)||correct_index<0||correct_index>3) throw new Error("Choose a valid correct answer.");
-  return {prompt,choices,correct_index,order_type,source_page,updated_at:new Date().toISOString()};
-}
-async function saveDraftCard(card,status=null){
-  if(!sbClient || !canEditCurrentCloudBank()) return;
-  const id=card?.dataset?.draftId; if(!id) return;
-  const patch=draftPatchFromCard(card); if(status) patch.status=status;
-  const {error}=await sbClient.from("question_drafts").update(patch).eq("id",id).eq("bank_id",CURRENT_BANK_META.dbId);
-  if(error) throw error;
-  await refreshQuestionDrafts();
-}
-async function publishApprovedQuestionDrafts(){
-  if(!sbClient || !currentUser || !canEditCurrentCloudBank()) return alert("This bank is not editable by your account.");
-  const expectedRevision=Number(CURRENT_BANK_META.contentRevision)||1;
-  const {data,error}=await sbClient.rpc("publish_approved_question_drafts",{p_bank_id:CURRENT_BANK_META.dbId,p_expected_revision:expectedRevision});
-  if(error) throw error;
-  const result=Array.isArray(data)?data[0]:data;
-  if(!result?.saved){
-    await loadCloudBanks(); await activateBankByKey(CURRENT_BANK_META.key,{syncCloud:false,saveCurrent:false});
-    await refreshQuestionDrafts();
-    throw new Error(`The bank changed before publishing. The newest revision (${result?.content_revision ?? "unknown"}) is loaded; review the drafts and publish again.`);
-  }
-  await loadCloudBanks(); await activateBankByKey(CURRENT_BANK_META.key,{syncCloud:false,saveCurrent:false});
-  await refreshQuestionDrafts();
-  alert(`${Number(result.published_count)||0} approved question${Number(result.published_count)===1?"":"s"} published. Other users of this bank can receive the new content without a GitHub update.`);
-}
+// Legacy draft helpers remain as no-ops so older cached markup cannot break the app.
+async function refreshQuestionDrafts(){ return; }
+function renderQuestionDrafts(){ return; }
+async function saveDraftCard(){ return; }
+async function publishApprovedQuestionDrafts(){ return; }
 
-async function openMaterial(name){
-  const path=`${materialPrefix()}/${name}`;
-  // Open the tab while the click still counts as a direct user gesture; Safari
-  // may block a new window if we wait for the signed-URL request first.
-  const popup=window.open("about:blank","_blank");
-  const {data,error}=await sbClient.storage.from("bank-materials").createSignedUrl(path,300);
-  if(error){ try{ popup?.close(); }catch(e){}; return alert(error.message); }
-  if(popup){ popup.opener=null; popup.location.href=data.signedUrl; }
-  else alert("Your browser blocked the material window. Allow pop-ups for this IPAP site, then try again.");
-}
-async function deleteMaterial(name){
-  if(!canEditCurrentCloudBank()) return;
-  const {error}=await sbClient.storage.from("bank-materials").remove([`${materialPrefix()}/${name}`]);
-  if(error) return alert(error.message);
-  await refreshBankMaterials();
-}
+async function openMaterialPath(path){ return openStoragePath(path); }
 async function deleteAllBankMaterials(){
   if(!sbClient || CURRENT_BANK_META.kind!=="cloud" || CURRENT_BANK_META.permission!=="owner") return;
   const prefix=materialPrefix();
@@ -2962,16 +3144,6 @@ async function adminDeleteUser(userId){
   await loadCloudBanks(); renderBankSelector();
 }
 
-async function quickAddNewBank(){
-  if(!sbClient||!currentUser) return alert("Sign in first.");
-  const name=prompt("New study bank name (example: Respiratory):",""); if(!name?.trim()) return;
-  const subject=prompt("Subject:",name.trim()); if(!subject?.trim()) return;
-  const pkg=normalizeBankPackage({format:"IPAPStudyBank",schemaVersion:1,bankId:`IPAP-${randomToken(10)}`,name:name.trim(),subject:subject.trim(),description:"",bank:{},slideOffset:{},reviewTopics:{}});
-  const key=await createCloudBankFromPackage(pkg);
-  await activateBankByKey(key,{syncCloud:false,saveCurrent:false});
-  const firstName=prompt("Create the first day/section now? Enter a name, or Cancel to do it later.","Day 1");
-  if(firstName?.trim()) await createNewDay(firstName.trim());
-}
 async function renameCurrentBank(){
   if(!sbClient||CURRENT_BANK_META.kind!=="cloud"||CURRENT_BANK_META.permission!=="owner") return alert("Only the bank owner can rename this bank.");
   const name=prompt("Rename study bank:",CURRENT_BANK_META.name); if(!name?.trim()||name.trim()===CURRENT_BANK_META.name) return;
@@ -2991,14 +3163,14 @@ async function createNewDay(prefilledName=""){
   const {data,error}=await sbClient.rpc("create_bank_section",{p_bank_id:CURRENT_BANK_META.dbId,p_name:name.trim()}); if(error) throw error;
   const result=Array.isArray(data)?data[0]:data; const key=CURRENT_BANK_META.key;
   await loadCloudBanks(); await activateBankByKey(key,{syncCloud:false,saveCurrent:false});
-  if(result?.section_key && $("day")){ $("day").value=result.section_key; updateLifetimeUI(); updateCoverageStatus(); updateDayActionState(); renderDaySourceAssignments(); }
+  if(result?.section_key && $("day")){ $("day").value=result.section_key; syncDaySelectorUI(); updateLifetimeUI(); updateCoverageStatus(); updateDayActionState(); renderDaySourceAssignments(); }
 }
 async function renameSelectedDay(){
   const meta=selectedSectionMeta(); if(!meta||!canEditCurrentCloudBank()) return;
   const name=prompt("Rename this day/section:",meta.name); if(!name?.trim()||name.trim()===meta.name) return;
   const {error}=await sbClient.rpc("rename_bank_section",{p_bank_id:CURRENT_BANK_META.dbId,p_section_key:meta.section_key,p_name:name.trim()}); if(error) throw error;
   const key=CURRENT_BANK_META.key,sectionKey=meta.section_key; await loadCloudBanks(); await activateBankByKey(key,{syncCloud:false,saveCurrent:false});
-  if($("day")){ $("day").value=sectionKey; updateLifetimeUI(); updateCoverageStatus(); updateDayActionState(); renderDaySourceAssignments(); }
+  if($("day")){ $("day").value=sectionKey; syncDaySelectorUI(); updateLifetimeUI(); updateCoverageStatus(); updateDayActionState(); renderDaySourceAssignments(); }
 }
 function parseRangeText(text,maxCount=null){
   const clean=String(text||"").trim(); if(!clean||clean.toLowerCase()==="all") return [];
@@ -3036,8 +3208,8 @@ async function saveSectionAssignments(meta,assignments,{offerRebuild=false}={}){
   }
   const {error}=await sbClient.rpc("save_bank_section_assignments",{p_bank_id:CURRENT_BANK_META.dbId,p_section_key:meta.section_key,p_source_assignments:assignments}); if(error) throw error;
   const key=CURRENT_BANK_META.key,sectionKey=meta.section_key; await loadCloudBanks(); await activateBankByKey(key,{syncCloud:false,saveCurrent:false});
-  if($("day")) $("day").value=sectionKey; renderDaySourceAssignments(); updateLifetimeUI();
-  if(offerRebuild&&publishedCount>0&&confirm("Would you like to generate a new review/replacement draft set from the corrected ranges now? Existing questions remain active until you review and publish new drafts.")) await generateDraftQuestionsFromSources();
+  if($("day")){ $("day").value=sectionKey; syncDaySelectorUI(); } renderDaySourceAssignments(); updateLifetimeUI();
+  if(offerRebuild&&publishedCount>0&&confirm("Would you like to generate new questions from the corrected source ranges now? Existing questions will remain active unless you edit or mark them invalid.")) await generateDraftQuestionsFromSources();
   return true;
 }
 async function assignCheckedSourcesToDay(){
@@ -3050,7 +3222,8 @@ async function assignCheckedSourcesToDay(){
       const input=prompt(`${info.name} has ${info.count} ${info.unit}${info.count===1?"":"s"}.\nEnter the ${info.unit} range(s) for ${meta.name}, for example 1-75, 90-105. Type All for the entire source.`,`1-${info.count}`);
       if(input===null) continue; ranges=parseRangeText(input,Number(info.count));
     }
-    const row={path:info.path,name:info.name,type:info.type,unit:info.unit,count:info.count||null,ranges};
+    const linked=currentBankSources.find(x=>x.path===info.path);
+    const row={path:info.path,assetId:info.id||linked?.assetId||null,name:info.name,type:info.type,unit:info.unit,count:info.count||null,ranges};
     const idx=existing.findIndex(x=>x.path===info.path); if(idx>=0)existing[idx]=row;else existing.push(row);
   }
   await saveSectionAssignments(meta,existing,{offerRebuild:true});
@@ -3067,7 +3240,224 @@ async function removeDayAssignment(index){
   rows.splice(index,1); await saveSectionAssignments(meta,rows);
 }
 
+
+// ---------------- v3.4 question correction / review workflow ----------------
+function closeQuestionOptions(){ $("questionOptionsMenu")?.classList.add("hide"); }
+function updateQuestionOptionsUI(){
+  const cloud=CURRENT_BANK_META.kind==="cloud" && !!CURRENT_BANK_META.dbId;
+  const editable=cloud && canEditCurrentCloudBank();
+  $("questionOptionsButton")?.classList.toggle("hide",!cloud);
+  $("editQuestionNow")?.classList.toggle("hide",!editable);
+  $("markQuestionReview")?.classList.toggle("hide",!editable);
+  $("markQuestionInvalid")?.classList.toggle("hide",!editable);
+  $("reportQuestion")?.classList.toggle("hide",!(cloud&&!editable));
+  if(!cloud) closeQuestionOptions();
+}
+async function activeQuestionVersionMeta(questionId){
+  if(!sbClient||CURRENT_BANK_META.kind!=="cloud") return null;
+  const {data,error}=await sbClient.from("question_versions")
+    .select("question_id,version,section_key,set_key,order_type,prompt,choices,correct_index,source_path,source_name,source_page,source_basis")
+    .eq("bank_id",CURRENT_BANK_META.dbId).eq("question_id",questionId).eq("is_active",true).maybeSingle();
+  if(error && error.code!=="PGRST116") console.warn("Question version load failed",error);
+  return data||null;
+}
+async function excludeCurrentAttemptFromMetrics(item,reason="invalid_question"){
+  if(!item?.answered) return false;
+  if(item.preAnswerStat){
+    progress[item.id]={...defaultStat(),...item.preAnswerStat,updatedAt:new Date().toISOString()};
+  }else{
+    // Older resumed sessions may not contain a pre-answer snapshot. In that
+    // rare case avoid guessing at prior aggregates; only remove this quiz score.
+    const s=statFor(item.id); s.updatedAt=new Date().toISOString();
+  }
+  answered=Math.max(0,answered-1);
+  if(item.wasCorrect) correct=Math.max(0,correct-1);
+  missedThisQuiz=missedThisQuiz.filter(q=>q.id!==item.id);
+  if(item.reviewEventId){
+    const eventId=item.reviewEventId;
+    saveReviewEventQueue(loadReviewEventQueue().filter(r=>r?.event_id!==eventId));
+    if(sbClient&&currentUser) sbClient.rpc("exclude_review_event",{p_event_id:eventId,p_reason:reason}).catch(()=>{});
+  }
+  item.answered=false; item.selected=null; item.wasCorrect=null; item.preAnswerStat=null; item.reviewEventId=null; item.shownAt=new Date().toISOString();
+  locked=false;
+  saveProgress(); updateLifetimeUI();
+  return true;
+}
+function updateBankQuestionInMemory(questionId,fields){
+  let oldDay=null,oldSet=null,oldIndex=-1;
+  for(const [day,sets] of Object.entries(BANK||{})){
+    for(const [setKey,rows] of Object.entries(sets||{})){
+      if(!Array.isArray(rows)) continue;
+      const i=rows.findIndex(r=>String(r?.[4]||"")===questionId);
+      if(i>=0){ oldDay=day; oldSet=setKey; oldIndex=i; break; }
+    }
+    if(oldIndex>=0) break;
+  }
+  if(oldIndex<0) return null;
+  BANK[oldDay][oldSet].splice(oldIndex,1);
+  const prefix=oldSet.match(/^(.*)-(First|Second)$/)?.[1]||"Generated";
+  const targetSet=`${prefix}-${fields.order}`;
+  if(!BANK[fields.day]) BANK[fields.day]={};
+  if(!Array.isArray(BANK[fields.day][targetSet])) BANK[fields.day][targetSet]=[];
+  BANK[fields.day][targetSet].push([fields.prompt,fields.choices,fields.correctIndex,fields.sourcePage,questionId]);
+  ALL=allQuestionObjects();
+  return ALL.find(q=>q.id===questionId)||null;
+}
+async function openQuestionEditor(item){
+  if(!canEditCurrentCloudBank()) return alert("Only a bank owner/editor can change this question.");
+  if(!item) return;
+  const version=await activeQuestionVersionMeta(item.id);
+  item.questionVersion=version?.version||item.questionVersion||null;
+  editingQuestionContext={questionId:item.id,item,fromQuiz:active.includes(item),version};
+  $("editQuestionPrompt").value=version?.prompt||item.q||"";
+  const choices=Array.isArray(version?.choices)?version.choices:(item.o||[]);
+  $("editQuestionChoices").innerHTML=[0,1,2,3].map(i=>`<label>${String.fromCharCode(65+i)}<input type="text" data-edit-choice="${i}" value="${escapeHtml(choices[i]||"")}"></label>`).join("");
+  $("editQuestionCorrect").value=String(Number.isInteger(version?.correct_index)?version.correct_index:item.a||0);
+  $("editQuestionOrder").value=version?.order_type||item.order||"First";
+  const daySel=$("editQuestionDay"); daySel.innerHTML=currentSectionEntries().map(x=>`<option value="${escapeHtml(x.section_key)}">${escapeHtml(x.name)}</option>`).join("");
+  daySel.value=version?.section_key||item.day;
+  $("editQuestionSourcePage").value=String(Number(version?.source_page ?? item.page)||0);
+  const sourceName=version?.source_name||"Source material";
+  const basis=version?.source_basis||"";
+  $("editQuestionSourceInfo").innerHTML=`<strong>${escapeHtml(sourceName)}</strong>${basis?`<br>${escapeHtml(basis)}`:""}<br><span class="section-help">Permanent question ID: ${escapeHtml(item.id)}</span>`;
+  $("openQuestionSource")?.classList.toggle("hide",!version?.source_path);
+  closeQuestionOptions(); openModal("questionEditModal");
+}
+async function openQuestionEditorById(questionId){
+  const raw=ALL.find(q=>q.id===questionId);
+  if(!raw) return alert("This question is not currently available in the bank.");
+  await openQuestionEditor(prepareQuestion(raw));
+}
+async function saveQuestionEdit(){
+  const ctx=editingQuestionContext; if(!ctx||!canEditCurrentCloudBank()) return;
+  const prompt=String($("editQuestionPrompt")?.value||"").trim();
+  const choices=[...document.querySelectorAll("[data-edit-choice]")].sort((a,b)=>Number(a.dataset.editChoice)-Number(b.dataset.editChoice)).map(x=>x.value.trim());
+  const correctIndex=Number($("editQuestionCorrect")?.value); const order=$("editQuestionOrder")?.value||"First"; const day=$("editQuestionDay")?.value||ctx.item.day;
+  const sourcePage=Math.max(0,Number($("editQuestionSourcePage")?.value)||0);
+  if(!prompt||choices.length!==4||choices.some(x=>!x)) return alert("Enter the question and all four answer choices.");
+  const version=ctx.version||await activeQuestionVersionMeta(ctx.questionId);
+  const wasAnswered=!!ctx.item.answered;
+  const {data,error}=await sbClient.rpc("edit_published_question",{
+    p_bank_id:CURRENT_BANK_META.dbId,p_question_id:ctx.questionId,p_section_key:day,p_prompt:prompt,p_choices:choices,p_correct_index:correctIndex,p_order_type:order,p_source_page:sourcePage,
+    p_source_path:version?.source_path||null,p_source_name:version?.source_name||"",p_source_basis:version?.source_basis||""
+  });
+  if(error) throw error;
+  const result=Array.isArray(data)?data[0]:data;
+  if(result?.content_revision) CURRENT_BANK_META.contentRevision=Number(result.content_revision);
+  if(wasAnswered) await excludeCurrentAttemptFromMetrics(ctx.item,"question_edited");
+  const updated=updateBankQuestionInMemory(ctx.questionId,{prompt,choices,correctIndex,order,day,sourcePage});
+  if(ctx.fromQuiz&&updated){
+    const pos=active.findIndex(x=>x.id===ctx.questionId);
+    if(pos>=0){ const fresh=prepareQuestion(updated); fresh.questionVersion=Number(result?.question_version)||((version?.version||0)+1)||null; active[pos]=fresh; if(pos===index) locked=false; }
+  }
+  if(Array.isArray(CURRENT_BANK_META.invalidQuestionIds)) CURRENT_BANK_META.invalidQuestionIds=CURRENT_BANK_META.invalidQuestionIds.filter(id=>id!==ctx.questionId);
+  closeModal("questionEditModal"); editingQuestionContext=null;
+  await loadCloudBanks(); renderBankSelector();
+  await refreshQuestionReviewQueue().catch(()=>{});
+  updateLifetimeUI(); updateCoverageStatus();
+  if(ctx.fromQuiz){ render(); saveProgress(); }
+  else alert("Question updated. Future quizzes will use the corrected version.");
+}
+async function flagCurrentQuestion(flagType){
+  const item=active[index]; if(!item||CURRENT_BANK_META.kind!=="cloud") return;
+  const editable=canEditCurrentCloudBank();
+  if(flagType==="invalid"&&!editable) return;
+  const version=await activeQuestionVersionMeta(item.id);
+  item.questionVersion=version?.version||item.questionVersion||null;
+  if(flagType==="invalid"){
+    if(!confirm("Mark this question invalid? This attempt will be removed from your metrics and the question will stay out of study rotation until an editor corrects it.")) return;
+  }
+  const type=editable?flagType:"report";
+  const {data,error}=await sbClient.rpc("flag_bank_question",{p_bank_id:CURRENT_BANK_META.dbId,p_question_id:item.id,p_flag_type:type,p_question_version:item.questionVersion,p_note:""});
+  if(error) throw error;
+  if(!questionFlagsThisQuiz.some(x=>x.questionId===item.id&&x.type===type)) questionFlagsThisQuiz.push({questionId:item.id,type,flagId:data});
+  closeQuestionOptions();
+  if(type==="invalid"){
+    await excludeCurrentAttemptFromMetrics(item,"invalid_question");
+    CURRENT_BANK_META.invalidQuestionIds=[...new Set([...(CURRENT_BANK_META.invalidQuestionIds||[]),item.id])];
+    active.splice(index,1); missedThisQuiz=missedThisQuiz.filter(q=>q.id!==item.id);
+    await refreshQuestionReviewQueue().catch(()=>{});
+    if(!active.length){ finish(); return; }
+    if(index>=active.length) index=active.length-1;
+    render(); saveProgress();
+    alert("Question marked invalid and removed from study rotation until corrected.");
+  }else{
+    await refreshQuestionReviewQueue().catch(()=>{});
+    alert(type==="report"?"Question reported to the bank owner/editor.":"Question added to the Review Queue.");
+  }
+}
+async function refreshQuestionReviewQueue(){
+  const holder=$("questionReviewQueue"); if(!holder) return;
+  if(!sbClient||CURRENT_BANK_META.kind!=="cloud"||!canEditCurrentCloudBank()){ holder.innerHTML="<p>Question review is available to bank owners/editors.</p>"; return; }
+  const {data:flags,error}=await sbClient.from("question_flags").select("id,question_id,question_version,flag_type,note,status,created_at").eq("bank_id",CURRENT_BANK_META.dbId).eq("status","open").order("created_at",{ascending:false}).limit(200);
+  if(error) throw error;
+  if(!flags?.length){ holder.innerHTML="<p>No questions are waiting for review.</p>"; return; }
+  const ids=[...new Set(flags.map(f=>f.question_id))];
+  const {data:versions}=await sbClient.from("question_versions").select("question_id,prompt,source_name,source_page,version").eq("bank_id",CURRENT_BANK_META.dbId).eq("is_active",true).in("question_id",ids);
+  const vm=new Map((versions||[]).map(v=>[v.question_id,v]));
+  holder.innerHTML=flags.map(f=>{
+    const v=vm.get(f.question_id); const raw=ALL.find(q=>q.id===f.question_id); const prompt=v?.prompt||raw?.q||f.question_id;
+    const label=f.flag_type==="invalid"?"Invalid":f.flag_type==="report"?"Reported":"Review later";
+    return `<div class="review-flag" data-review-flag="${escapeHtml(f.id)}"><strong>${escapeHtml(prompt)}</strong><br><span class="pill">${label}</span>${v?.source_page?`<span class="pill">Slide/page ${Number(v.source_page)}</span>`:""}<div class="actions"><button type="button" data-review-edit="${escapeHtml(f.question_id)}">Edit question</button><button type="button" class="secondary" data-review-resolve="${escapeHtml(f.id)}">Mark resolved</button></div></div>`;
+  }).join("");
+}
+async function resolveQuestionFlag(flagId){
+  const {error}=await sbClient.rpc("resolve_question_flag",{p_flag_id:flagId,p_resolution:"resolved"}); if(error) throw error; await refreshQuestionReviewQueue();
+  await loadCloudBanks();
+}
+function openReviewQueueFromResults(){
+  $("results")?.classList.add("hide"); $("setup")?.classList.remove("hide");
+  const details=$("materialsDetails"); if(details){ details.open=true; details.scrollIntoView({behavior:"smooth",block:"start"}); }
+  refreshQuestionReviewQueue().catch(e=>alert(e.message));
+}
+
 // Event wiring for account, bank library, sharing, settings, and materials.
+$("refreshContentLibrary")?.addEventListener("click",()=>refreshContentLibrary().catch(e=>alert(e.message)));
+$("uploadLibraryMaterial")?.addEventListener("click",()=>uploadLibraryMaterials().catch(e=>alert(e.message)));
+$("contentLibraryList")?.addEventListener("click",e=>{
+  const open=e.target.closest("[data-library-open]");
+  if(open){ const asset=contentLibraryAssets.find(x=>String(x.id)===String(open.getAttribute("data-library-open"))); if(asset) return openStoragePath(asset.storage_path).catch(err=>alert(err.message)); }
+  const del=e.target.closest("[data-library-delete]"); if(del) return deleteLibraryAsset(del.getAttribute("data-library-delete")).catch(err=>alert(err.message));
+});
+$("createGuidedBank")?.addEventListener("click",()=>createGuidedBank().catch(e=>alert(e.message)));
+$("cancelNewBank")?.addEventListener("click",()=>closeModal("newBankModal"));
+$("cancelNewBankTop")?.addEventListener("click",()=>closeModal("newBankModal"));
+$("attachLibrarySources")?.addEventListener("click",()=>openAttachSourceModal().catch(e=>alert(e.message)));
+$("confirmAttachSources")?.addEventListener("click",()=>confirmAttachSources().catch(e=>alert(e.message)));
+$("cancelAttachSources")?.addEventListener("click",()=>closeModal("attachSourceModal"));
+$("cancelAttachSourceTop")?.addEventListener("click",()=>closeModal("attachSourceModal"));
+$("questionOptionsButton")?.addEventListener("click",e=>{ e.stopPropagation(); $("questionOptionsMenu")?.classList.toggle("hide"); });
+$("editQuestionNow")?.addEventListener("click",()=>openQuestionEditor(active[index]).catch(e=>alert(e.message)));
+$("markQuestionReview")?.addEventListener("click",()=>flagCurrentQuestion("review").catch(e=>alert(e.message)));
+$("reportQuestion")?.addEventListener("click",()=>flagCurrentQuestion("report").catch(e=>alert(e.message)));
+$("markQuestionInvalid")?.addEventListener("click",()=>flagCurrentQuestion("invalid").catch(e=>alert(e.message)));
+$("saveQuestionEdit")?.addEventListener("click",()=>saveQuestionEdit().catch(e=>alert(e.message)));
+$("cancelQuestionEdit")?.addEventListener("click",()=>{ closeModal("questionEditModal"); editingQuestionContext=null; });
+$("cancelQuestionEditTop")?.addEventListener("click",()=>{ closeModal("questionEditModal"); editingQuestionContext=null; });
+$("openQuestionSource")?.addEventListener("click",()=>{ const path=editingQuestionContext?.version?.source_path; if(path) openStoragePath(path).catch(e=>alert(e.message)); });
+$("refreshQuestionReviewQueue")?.addEventListener("click",()=>refreshQuestionReviewQueue().catch(e=>alert(e.message)));
+$("questionReviewQueue")?.addEventListener("click",e=>{
+  const edit=e.target.closest("[data-review-edit]"); if(edit) return openQuestionEditorById(edit.getAttribute("data-review-edit")).catch(err=>alert(err.message));
+  const resolve=e.target.closest("[data-review-resolve]"); if(resolve) return resolveQuestionFlag(resolve.getAttribute("data-review-resolve")).catch(err=>alert(err.message));
+});
+$("openReviewQueueAfterQuiz")?.addEventListener("click",openReviewQueueFromResults);
+$("bankSelectorButton")?.addEventListener("click",e=>{ e.stopPropagation(); toggleActionSelect("bankSelector"); });
+$("bankSelectorMenu")?.addEventListener("click",async e=>{
+  const add=e.target.closest("[data-add-bank]");
+  if(add){ closeActionSelect("bankSelector"); try{ await quickAddNewBank(); }catch(err){ alert(err.message); renderBankSelector(); } return; }
+  const item=e.target.closest("[data-bank-key]"); if(!item)return;
+  const key=item.getAttribute("data-bank-key"); closeActionSelect("bankSelector");
+  try{ await activateBankByKey(key); }catch(err){ alert(err.message); renderBankSelector(); }
+});
+$("daySelectorButton")?.addEventListener("click",e=>{ e.stopPropagation(); toggleActionSelect("daySelector"); });
+$("daySelectorMenu")?.addEventListener("click",async e=>{
+  const add=e.target.closest("[data-add-day]");
+  if(add){ closeActionSelect("daySelector"); try{ await createNewDay(); }catch(err){ alert(err.message); refreshFilterSelectors(); } return; }
+  const item=e.target.closest("[data-day-key]"); if(!item)return;
+  const key=item.getAttribute("data-day-key"); closeActionSelect("daySelector");
+  const sel=$("day"); if(!sel)return; sel.value=key; syncDaySelectorUI(); sel.dispatchEvent(new Event("change",{bubbles:true}));
+});
+
 $("bankSelector")?.addEventListener("change",async e=>{
   const old=CURRENT_BANK_META.key;
   try{
@@ -3077,7 +3467,8 @@ $("bankSelector")?.addEventListener("change",async e=>{
       return;
     }
     await activateBankByKey(e.target.value);
-  }catch(err){ alert(err.message); renderBankSelector(); $("bankSelector").value=old; }
+    syncBankSelectorUI();
+  }catch(err){ alert(err.message); renderBankSelector(); $("bankSelector").value=old; syncBankSelectorUI(); }
 });
 $("refreshBanks")?.addEventListener("click",refreshBankLibrary);
 $("renameBank")?.addEventListener("click",()=>renameCurrentBank().catch(e=>alert(e.message)));
@@ -3098,7 +3489,16 @@ $("daySourceAssignments")?.addEventListener("click",e=>{
   const edit=e.target.closest("[data-edit-assignment]"); if(edit) return editDayAssignment(Number(edit.getAttribute("data-edit-assignment"))).catch(err=>alert(err.message));
   const del=e.target.closest("[data-remove-assignment]"); if(del) return removeDayAssignment(Number(del.getAttribute("data-remove-assignment"))).catch(err=>alert(err.message));
 });
-document.addEventListener("click",e=>{ if(!e.target.closest("#accountMenu")&&!e.target.closest("#accountMenuButton")) closeAccountMenu(); });
+document.addEventListener("click",e=>{
+  if(!e.target.closest("#accountMenu")&&!e.target.closest("#accountMenuButton")) closeAccountMenu();
+  if(!e.target.closest("#bankSelectorControl")) closeActionSelect("bankSelector");
+  if(!e.target.closest("#daySelectorControl")) closeActionSelect("daySelector");
+  if(!e.target.closest("#questionOptionsMenu")&&!e.target.closest("#questionOptionsButton")) closeQuestionOptions();
+});
+document.addEventListener("keydown",e=>{ if(e.key==="Escape"){
+  closeActionSelect("bankSelector"); closeActionSelect("daySelector"); closeQuestionOptions();
+  closeModal("newBankModal"); closeModal("attachSourceModal"); closeModal("questionEditModal"); editingQuestionContext=null;
+} });
 $("createEmptyBank")?.addEventListener("click",()=>createEmptyPersonalBank().catch(e=>alert(e.message)));
 $("copyBuiltinToCloud")?.addEventListener("click",()=>copyBuiltinBankToCloud().catch(e=>alert(e.message)));
 $("importBankFile")?.addEventListener("change",async e=>{
@@ -3140,8 +3540,9 @@ $("bankSharingBody")?.addEventListener("change",e=>{
   replaceCurrentBankContent(file).catch(err=>alert(`Could not update bank: ${err.message}`));
 });
 $("materialList")?.addEventListener("click",e=>{
-  const open=e.target.closest("[data-open-material]"); if(open) return openMaterial(open.getAttribute("data-open-material")).catch(err=>alert(err.message));
-  const del=e.target.closest("[data-delete-material]"); if(del) return deleteMaterial(del.getAttribute("data-delete-material")).catch(err=>alert(err.message));
+  const open=e.target.closest("[data-open-material-path]"); if(open) return openMaterialPath(open.getAttribute("data-open-material-path")).catch(err=>alert(err.message));
+  const detach=e.target.closest("[data-detach-asset]"); if(detach) return detachLibrarySource(detach.getAttribute("data-detach-asset")).catch(err=>alert(err.message));
+  const legacy=e.target.closest("[data-delete-legacy]"); if(legacy) return deleteLegacyMaterial(legacy.getAttribute("data-delete-legacy")).catch(err=>alert(err.message));
 });
 
 async function initializeMultiUserLayer(){
@@ -3346,7 +3747,7 @@ $("day")?.addEventListener("change",async e=>{
     try{ await createNewDay(); }catch(err){ alert(err.message); refreshFilterSelectors(); }
     return;
   }
-  updateCoverageStatus(); updateLifetimeUI(); updateDayActionState(); renderDaySourceAssignments(); updateGenerationStudioAvailability();
+  syncDaySelectorUI(); updateCoverageStatus(); updateLifetimeUI(); updateDayActionState(); renderDaySourceAssignments(); updateGenerationStudioAvailability();
 });
 ["order","source"].forEach(id=>$(id)?.addEventListener("change",updateCoverageStatus));
 

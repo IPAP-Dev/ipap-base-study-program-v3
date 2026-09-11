@@ -1,4 +1,4 @@
-const CACHE_NAME = "ipap-base-study-program-v3.3.0";
+const CACHE_NAME = "ipap-base-study-program-v3.4.0";
 const CORE_ASSETS = [
   "./",
   "./index.html",

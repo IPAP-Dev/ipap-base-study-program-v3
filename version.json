@@ -1,6 +1,6 @@
 {
   "name": "IPAP Base Study Program",
-  "version": "3.3.0",
-  "schemaVersion": 9,
+  "version": "3.4.0",
+  "schemaVersion": 10,
   "questionIdScheme": "immutable-v1"
 }
