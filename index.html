@@ -160,7 +160,7 @@ body.auth-locked #setup>:not(h1):not(#accountCard){display:none!important} body.
     <summary>App status</summary>
     <div id="webAppPanel" class="notice small" style="margin-top:10px">
       <span id="webAppStatus">Checking browser mode…</span><br>
-      <span>Version <strong id="appVersionLabel">3.4.0</strong></span>
+      <span>Version <strong id="appVersionLabel">3.5.1</strong></span>
     </div>
   </details>
 
@@ -292,18 +292,18 @@ body.auth-locked #setup>:not(h1):not(#accountCard){display:none!important} body.
         <div class="actions"><button id="openGuidedDaySetup" type="button">Create / set up a day</button></div>
       </div>
 
-      <details class="advanced-source-tools">
-        <summary>Advanced source management</summary>
-      <div class="content-studio">
-        <strong>Source material for this bank</strong>
-        <p class="section-help" style="margin:5px 0 8px">These are the files this bank can use.</p>
+      <div class="content-studio" id="bankMaterialsStudio">
+        <strong>Materials in this bank</strong>
+        <p class="section-help" style="margin:5px 0 8px">Add or remove source files for this bank. Removing a file here keeps it in your Content Library.</p>
         <div class="actions">
-          <button id="attachLibrarySources" type="button" class="secondary">Add material from Content Library</button>
+          <button id="attachLibrarySources" type="button" class="secondary">Add material</button>
           <button id="refreshMaterials" type="button" class="secondary">Refresh</button>
         </div>
         <div id="materialList" class="small"></div>
       </div>
 
+      <details class="advanced-source-tools">
+        <summary>Advanced day &amp; generation tools</summary>
       <div class="content-studio" id="daySourceStudio">
         <strong>Slides for this day</strong>
         <p id="daySourceTarget" class="section-help" style="margin:5px 0 8px">Choose a specific day above first.</p>
@@ -654,7 +654,7 @@ body.auth-locked #setup>:not(h1):not(#accountCard){display:none!important} body.
 const HEART_BANK = window.IPAP_BUILTIN_HEART.bank;
 const DEFAULT_MASTER_STREAK = 3;
 let MASTER_STREAK = DEFAULT_MASTER_STREAK;
-const APP_VERSION = "3.5.0";
+const APP_VERSION = "3.5.1";
 const DATA_SCHEMA_VERSION = 11;
 const QUESTION_ID_SCHEME = "immutable-v1";
 const HEART_STORAGE_KEY = "heartQuizTrainerAdaptiveProgressV1";
@@ -3057,12 +3057,12 @@ async function refreshBankMaterials(){
 }
 function renderMaterialList(items,error=""){
   const holder=$("materialList"); if(!holder) return;
-  if(CURRENT_BANK_META.kind!=="cloud"){ holder.innerHTML="<p>Open an editable cloud bank to build study content.</p>"; updateGenerationStudioAvailability(); renderDaySourceAssignments(); return; }
-  if(error){ holder.innerHTML=`<p>Could not load material: ${escapeHtml(error)}</p>`; return; }
+  if(CURRENT_BANK_META.kind!=="cloud"){ holder.innerHTML="<p>Open an editable cloud bank to manage its materials.</p>"; updateGenerationStudioAvailability(); renderDaySourceAssignments(); return; }
+  if(error){ holder.innerHTML=`<p>Couldn’t load bank materials.</p>`; return; }
   if(!items.length){ holder.innerHTML="<p>No material is attached to this bank yet.</p>"; updateGenerationStudioAvailability(); renderDaySourceAssignments(); return; }
   holder.innerHTML=items.map(x=>{
-    const count=x.count!=null?` • ${Number(x.count)} ${escapeHtml(x.unit||"page")}${Number(x.count)===1?"":"s"}`:"";
-    return `<div class="material-item"><span class="source-check">${canEditCurrentCloudBank()?`<input type="checkbox" data-generation-path="${escapeHtml(x.path)}" aria-label="Use ${escapeHtml(x.name)}">`:""}<span><strong>${escapeHtml(x.name)}</strong><span class="section-help">${count}</span></span></span><span class="actions"><button type="button" class="secondary mini-button" data-open-material-path="${escapeHtml(x.path)}">Open</button>${canEditCurrentCloudBank()&&x.kind==="library"?`<button type="button" class="secondary mini-button" data-detach-asset="${escapeHtml(x.assetId)}">Detach</button>`:""}${canEditCurrentCloudBank()&&x.kind==="legacy"?`<button type="button" class="secondary mini-button" data-delete-legacy="${escapeHtml(x.storedName||"")}">Delete</button>`:""}</span></div>`;
+    const count=x.count!=null?`${Number(x.count)} ${escapeHtml(x.unit||"page")}${Number(x.count)===1?"":"s"}`:"Source file";
+    return `<div class="material-item"><span><strong>${escapeHtml(x.name)}</strong><br><span class="section-help">${count}</span></span><span class="actions"><button type="button" class="secondary mini-button" data-open-material-path="${escapeHtml(x.path)}">Open</button>${canEditCurrentCloudBank()&&x.kind==="library"?`<button type="button" class="secondary mini-button" data-detach-asset="${escapeHtml(x.assetId)}">Remove from bank</button>`:""}${canEditCurrentCloudBank()&&x.kind==="legacy"?`<button type="button" class="secondary mini-button" data-delete-legacy="${escapeHtml(x.storedName||"")}">Delete</button>`:""}</span></div>`;
   }).join("");
   updateGenerationStudioAvailability(); renderDaySourceAssignments();
 }
@@ -3070,10 +3070,19 @@ async function detachLibrarySource(assetId){
   if(!canEditCurrentCloudBank()) return;
   const row=currentBankSources.find(x=>String(x.assetId)===String(assetId));
   if(!row) return;
-  if(!confirm(`Detach ${row.name} from ${CURRENT_BANK_META.name}?`)) return;
-  const {error}=await sbClient.rpc("detach_library_asset_from_bank",{p_bank_id:CURRENT_BANK_META.dbId,p_asset_id:assetId});
-  if(error) throw error;
-  await refreshBankMaterials(); await refreshContentLibrary();
+  const bankName=CURRENT_BANK_META.name||"this bank";
+  if(!confirm(`Remove “${row.name}” from ${bankName}?\n\nIt will stay in your Content Library. Any Day slide assignments using this file will also be removed. Existing questions will stay.`)) return;
+  const key=CURRENT_BANK_META.key,dayKey=$("day")?.value||"ALL";
+  try{
+    const {error}=await sbClient.rpc("detach_library_asset_from_bank",{p_bank_id:CURRENT_BANK_META.dbId,p_asset_id:assetId});
+    if(error) throw error;
+    await loadCloudBanks();
+    if(key&&BANK_META[key]){
+      await activateBankByKey(key,{syncCloud:false,saveCurrent:false,rememberSelection:false});
+      if($("day")&&[...$("day").options].some(o=>o.value===dayKey)){ $("day").value=dayKey; syncDaySelectorUI(); }
+    }
+    await refreshBankMaterials(); await refreshContentLibrary();
+  }catch(e){ showUserError(e,"Couldn’t remove this material from the bank. Please try again."); }
 }
 async function deleteLegacyMaterial(name){
   if(!canEditCurrentCloudBank()) return;
@@ -3511,6 +3520,7 @@ function cleanUserMessage(message,fallback="Something went wrong. Please try aga
   if(low.includes("failed to fetch") || low.includes("network")) return "The network connection was interrupted. Please try again.";
   if(low.includes("could not read") && low.includes("source")) return "This source file could not be opened. Upload it again.";
   if(low.includes("source was not found") || low.includes("source not found")) return "This source file is no longer available. Upload it again.";
+  if(low.includes("violates check constraint") || low.includes("constraint ") || low.includes("relation ") || low.includes("sqlstate")) return fallback;
   if(low.includes("column ") || low.includes("rpc(") || low.includes("supabase") || low.includes("postgres")) return fallback;
   return raw.length>260 ? fallback : raw;
 }
@@ -3565,7 +3575,8 @@ function renderContentLibraryList(){
       stateClass="ready";
       stateText=a.unit_count!=null ? `${Number(a.unit_count)} ${escapeHtml(a.unit||"page")}${Number(a.unit_count)===1?"":"s"}` : "Ready";
     }
-    const used=a.usedByCount ? ` • used by ${a.usedByCount} bank${a.usedByCount===1?"":"s"}` : "";
+    const bankNames=(a.usedByBanks||[]).map(x=>x.name).filter(Boolean);
+    const used=bankNames.length ? `<br><span>Used in: ${bankNames.map(escapeHtml).join(", ")}</span>` : "";
     const pendingRow=a._clientPending||status==="uploading"||status==="pending";
     return `<div class="library-item ${pendingRow?"uploading":""}" data-library-id="${escapeHtml(a.id||a.clientId||"")}"><div class="library-item-main"><div class="library-item-name">${escapeHtml(a.name)}</div><div class="section-help"><span class="library-state ${stateClass}">${stateText}</span>${used}</div></div><div class="library-item-actions">${(!pendingRow&&status==="ready")?`<button type="button" class="secondary mini-button" data-library-open="${escapeHtml(a.id)}">Open</button>`:""}${(!pendingRow)?`<button type="button" class="secondary mini-button" data-library-delete="${escapeHtml(a.id)}">Delete</button>`:""}</div></div>`;
   }).join("");
@@ -3578,14 +3589,27 @@ async function refreshContentLibrary(){
     .eq("owner_id",currentUser.id).order("created_at",{ascending:false});
   if(error) throw error;
   const ids=(assets||[]).map(x=>x.id);
-  let usage=[];
+  let usage=[],bankNames=new Map();
   if(ids.length){
     const {data,error:usageError}=await sbClient.from("bank_sources").select("asset_id,bank_id").in("asset_id",ids);
     if(!usageError) usage=data||[];
+    const bankIds=[...new Set((usage||[]).map(x=>x.bank_id).filter(Boolean))];
+    if(bankIds.length){
+      const {data:banks}=await sbClient.from("study_banks").select("id,name").in("id",bankIds);
+      bankNames=new Map((banks||[]).map(b=>[String(b.id),b.name]));
+    }
   }
-  const countMap=new Map();
-  for(const row of usage||[]) countMap.set(String(row.asset_id),(countMap.get(String(row.asset_id))||0)+1);
-  contentLibraryAssets=(assets||[]).map(a=>({...a,usedByCount:countMap.get(String(a.id))||0}));
+  const usageMap=new Map();
+  for(const row of usage||[]){
+    const key=String(row.asset_id);
+    const list=usageMap.get(key)||[];
+    list.push({bankId:row.bank_id,name:bankNames.get(String(row.bank_id))||"Study bank"});
+    usageMap.set(key,list);
+  }
+  contentLibraryAssets=(assets||[]).map(a=>{
+    const usedByBanks=usageMap.get(String(a.id))||[];
+    return {...a,usedByBanks,usedByCount:usedByBanks.length};
+  });
   renderContentLibraryList();
   return contentLibraryAssets;
 }
@@ -3662,19 +3686,37 @@ async function uploadLibraryMaterials(){
 }
 async function deleteLibraryAsset(assetId){
   const asset=contentLibraryAssets.find(a=>String(a.id)===String(assetId)); if(!asset) return;
-  if(asset.usedByCount) return alert(`This material is being used by ${asset.usedByCount} study bank${asset.usedByCount===1?"":"s"}. Remove it from those banks before deleting it.`);
-  if(!confirm(`Delete “${asset.name}”?`)) return;
-  const prior=[...contentLibraryAssets];
+  const banks=asset.usedByBanks||[];
+  const bankText=banks.length?banks.map(x=>x.name||"Study bank").join(", "):"";
+  const prompt=banks.length
+    ? `Delete “${asset.name}”?\n\nThis file is used in: ${bankText}.\n\nIt will be removed from those banks and their Day slide assignments, then deleted from your Content Library. Existing questions will stay.`
+    : `Delete “${asset.name}”?`;
+  if(!confirm(prompt)) return;
+  const prior=[...contentLibraryAssets],key=CURRENT_BANK_META.key,dayKey=$("day")?.value||"ALL";
   contentLibraryAssets=contentLibraryAssets.filter(a=>String(a.id)!==String(asset.id));
   renderContentLibraryList();
   try{
+    if(banks.length){
+      const {error:detachError}=await sbClient.rpc("detach_library_asset_from_all_banks",{p_asset_id:asset.id});
+      if(detachError) throw detachError;
+    }
     const {error:removeError}=await sbClient.storage.from("bank-materials").remove([asset.storage_path]);
     if(removeError) throw removeError;
     const {error}=await sbClient.rpc("delete_library_asset",{p_asset_id:asset.id});
     if(error) throw error;
     setLibraryUploadStatus(`${asset.name} deleted.`,{busy:false});
+    if(banks.length){
+      await loadCloudBanks().catch(()=>{});
+      if(key&&BANK_META[key]){
+        await activateBankByKey(key,{syncCloud:false,saveCurrent:false,rememberSelection:false}).catch(()=>{});
+        if($("day")&&[...$("day").options].some(o=>o.value===dayKey)){ $("day").value=dayKey; syncDaySelectorUI(); }
+        await refreshBankMaterials().catch(()=>{});
+      }
+    }
+    await refreshContentLibrary();
   }catch(e){
-    contentLibraryAssets=prior; renderContentLibraryList();
+    await refreshContentLibrary().catch(()=>{ contentLibraryAssets=prior; renderContentLibraryList(); });
+    if(banks.length) await refreshBankMaterials().catch(()=>{});
     showUserError(e,"Couldn’t delete this file. Please try again.");
   }
 }
