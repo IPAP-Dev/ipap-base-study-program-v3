@@ -125,6 +125,10 @@ body.auth-locked #setup>:not(h1):not(#accountCard){display:none!important} body.
 .section-help{color:var(--muted);font-size:14px;line-height:1.4}.quiet-details{margin-top:10px}.library-list{margin-top:10px}.library-item{display:flex;justify-content:space-between;gap:12px;align-items:center;border-top:1px solid var(--border);padding:10px 0}.library-item:first-child{border-top:none}.library-item-main{min-width:0}.library-item-name{font-weight:700;color:var(--text);overflow-wrap:anywhere}.library-item-actions{display:flex;gap:6px;flex-wrap:wrap}.library-item-actions button{width:auto;min-width:0}.modal-backdrop{position:fixed;inset:0;z-index:120;background:rgba(0,0,0,.48);display:flex;align-items:center;justify-content:center;padding:18px}.modal-card{width:min(620px,100%);max-height:88vh;overflow:auto;background:var(--card);color:var(--text);border:1px solid var(--border);border-radius:14px;padding:18px;box-shadow:0 18px 50px rgba(0,0,0,.3)}.modal-card-wide{width:min(820px,100%)}.modal-list{border:1px solid var(--border);border-radius:10px;padding:4px 10px;max-height:330px;overflow:auto}.modal-choice{display:flex;gap:9px;align-items:flex-start;padding:10px 2px;border-top:1px solid var(--border);font-weight:400}.modal-choice:first-child{border-top:none}.modal-choice input{width:20px;height:20px;margin:1px 0 0}.question-tool-wrap{position:relative;margin-top:8px;display:flex;justify-content:flex-end}.question-options-menu{position:absolute;right:0;top:44px;z-index:30;width:min(280px,90vw);background:var(--card);border:1px solid var(--border);border-radius:10px;padding:6px;box-shadow:0 12px 26px rgba(0,0,0,.18)}.question-options-menu button{margin:0 0 4px;width:100%;text-align:left;background:transparent;color:var(--text);border-color:transparent}.question-options-menu button:last-child{margin-bottom:0}.question-options-menu .danger{color:var(--bad)}.source-preview{margin-top:10px;border:1px solid var(--border);border-radius:9px;padding:10px}.review-flag{border-top:1px solid var(--border);padding:10px 0}.review-flag:first-child{border-top:none}.review-flag .actions{margin-top:8px}.review-flag .actions button{min-width:0}.tech-muted{display:none}.account-card h2{margin-bottom:4px}
 @media(max-width:620px){.library-item{align-items:flex-start;flex-direction:column}.library-item-actions{width:100%}.library-item-actions button{flex:1}.modal-backdrop{padding:10px}.question-options-menu{right:auto;left:0}.draft-choices{grid-template-columns:1fr}}
 
+/* v3.5 guided setup, upload feedback, visual day builder, and timing */
+.upload-status{margin-top:10px;padding:10px 12px;border:1px solid var(--border);border-radius:9px;background:var(--soft);display:flex;gap:10px;align-items:center}.upload-status.hide{display:none!important}.status-spinner{width:18px;height:18px;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:ipapSpin .8s linear infinite;flex:0 0 auto}@keyframes ipapSpin{to{transform:rotate(360deg)}}.library-state{font-weight:700}.library-state.ready{color:var(--good)}.library-state.failed{color:var(--bad)}.library-state.pending{color:var(--warn)}.library-item.uploading{opacity:.82}.guided-setup-card{border:1px solid var(--accent);border-radius:12px;padding:14px;margin:12px 0;background:var(--soft)}.guided-setup-card .actions{margin-top:10px}.day-builder-viewer-wrap{margin-top:12px;border:1px solid var(--border);border-radius:12px;overflow:hidden;background:#fff}.day-builder-viewer{display:block;width:100%;height:min(58vh,620px);border:0;background:#fff}.day-builder-placeholder{padding:24px;text-align:center;color:var(--muted);min-height:220px;display:flex;align-items:center;justify-content:center}.day-builder-range{margin-top:12px;padding:10px 12px;border-radius:9px;background:var(--soft);font-weight:700}.day-builder-after{margin-top:14px;padding:14px;border:1px solid var(--good);border-radius:10px}.question-timer{font-variant-numeric:tabular-nums;font-weight:800;border:1px solid var(--border);border-radius:999px;padding:4px 9px;white-space:nowrap}.quiz-status-group{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-end}.user-message{margin-top:8px}.advanced-source-tools{margin-top:12px}
+@media(max-width:620px){.day-builder-viewer{height:52vh}.quiz-status-group{justify-content:flex-start;width:100%}}
+
 </style>
 </head>
 <body>
@@ -230,6 +234,7 @@ body.auth-locked #setup>:not(h1):not(#accountCard){display:none!important} body.
       <input id="libraryMaterialFile" type="file" multiple accept=".pdf,.pptx,.docx,.txt,.md,application/pdf,application/vnd.openxmlformats-officedocument.presentationml.presentation,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain,text/markdown">
     </label>
     <div class="actions"><button id="uploadLibraryMaterial" type="button">Upload material</button></div>
+    <div id="libraryUploadStatus" class="upload-status hide" role="status" aria-live="polite"><span class="status-spinner" aria-hidden="true"></span><span id="libraryUploadStatusText">Uploading…</span></div>
     <div id="contentLibraryList" class="library-list small"><p>No material uploaded yet.</p></div>
   </section>
 
@@ -279,8 +284,16 @@ body.auth-locked #setup>:not(h1):not(#accountCard){display:none!important} body.
 
     <details id="materialsDetails">
       <summary>Build Study Content</summary>
-      <p class="section-help">Choose a day, assign the slides it covers, then generate questions. New questions are source-only and can be corrected while you study.</p>
+      <p class="section-help">Set up days, choose the slides each day covers, and generate source-only questions.</p>
 
+      <div class="guided-setup-card">
+        <strong>Guided bank setup</strong>
+        <p class="section-help" style="margin:5px 0 0">Create a day, visually confirm its slide range, then generate questions without jumping around the page.</p>
+        <div class="actions"><button id="openGuidedDaySetup" type="button">Create / set up a day</button></div>
+      </div>
+
+      <details class="advanced-source-tools">
+        <summary>Advanced source management</summary>
       <div class="content-studio">
         <strong>Source material for this bank</strong>
         <p class="section-help" style="margin:5px 0 8px">These are the files this bank can use.</p>
@@ -326,6 +339,7 @@ body.auth-locked #setup>:not(h1):not(#accountCard){display:none!important} body.
         <div class="topline"><div><strong>Question Review Queue</strong><br><span class="section-help">Questions marked during quizzes appear here.</span></div><button id="refreshQuestionReviewQueue" type="button" class="secondary mini-button">Refresh</button></div>
         <div id="questionReviewQueue" class="small"><p>No questions are waiting for review.</p></div>
       </div>
+      </details>
     </details>
   </section>
 
@@ -378,6 +392,7 @@ body.auth-locked #setup>:not(h1):not(#accountCard){display:none!important} body.
     <div class="stat"><b id="attemptCount">0</b><span class="small">Total attempts</span></div>
     <div class="stat"><b id="accuracy">—</b><span class="small">Lifetime accuracy</span></div>
     <div class="stat"><b id="dueCount">0</b><span class="small">Retention due in scope</span></div>
+    <div class="stat"><b id="avgQuestionTime">—</b><span class="small">Average time / question</span></div>
   </div>
 
   <div class="grid" style="margin-top:16px">
@@ -502,7 +517,7 @@ body.auth-locked #setup>:not(h1):not(#accountCard){display:none!important} body.
 <section class="panel hide" id="quiz">
   <div class="topline">
     <strong id="counter">Question 1 of 25</strong>
-    <span class="small" id="scoreline">Score: 0 / 0</span>
+    <div class="quiz-status-group"><span id="questionTimer" class="question-timer" aria-label="Time on this question">0:00</span><span class="small" id="scoreline">Score: 0 / 0</span></div>
   </div>
   <div class="progress"><div id="bar"></div></div>
   <div class="small" id="meta"></div>
@@ -569,6 +584,53 @@ body.auth-locked #setup>:not(h1):not(#accountCard){display:none!important} body.
   </div>
 </div>
 
+<div id="dayBuilderModal" class="modal-backdrop hide" aria-hidden="true">
+  <div class="modal-card modal-card-wide" role="dialog" aria-modal="true" aria-labelledby="dayBuilderTitle">
+    <div class="topline"><h2 id="dayBuilderTitle">Set up a day</h2><button id="closeDayBuilderTop" type="button" class="secondary mini-button">Close</button></div>
+    <p id="dayBuilderIntro" class="section-help">Scroll through the source, then choose the first and last slide/page for this day.</p>
+    <label style="margin-top:10px">Day name<input id="dayBuilderName" type="text" placeholder="Day 1"></label>
+    <label id="dayBuilderSourceLabel" style="margin-top:10px">Source material<select id="dayBuilderSource"></select></label>
+    <div id="dayBuilderViewerStatus" class="section-help user-message">Loading preview…</div>
+    <div class="day-builder-viewer-wrap">
+      <iframe id="dayBuilderViewer" class="day-builder-viewer hide" title="Source slide preview" referrerpolicy="no-referrer"></iframe>
+      <div id="dayBuilderViewerPlaceholder" class="day-builder-placeholder">Preparing your source preview…</div>
+    </div>
+    <div class="grid" style="margin-top:12px">
+      <label>First slide / page<input id="dayBuilderStart" type="number" min="1" value="1"></label>
+      <label>Last slide / page<input id="dayBuilderEnd" type="number" min="1" value="1"></label>
+    </div>
+    <div id="dayBuilderRangeSummary" class="day-builder-range">Choose a source to set the range.</div>
+    <div id="dayBuilderProgress" class="section-help user-message"></div>
+    <div id="dayBuilderBeforeSave" class="actions">
+      <button id="saveDayBuilder" type="button">Save day</button>
+      <button id="cancelDayBuilder" type="button" class="secondary">Cancel</button>
+    </div>
+    <div id="dayBuilderAfterSave" class="day-builder-after hide">
+      <strong id="dayBuilderSavedText">Day saved.</strong>
+      <p class="section-help" style="margin:5px 0 10px">Generate questions now, or add the next day.</p>
+      <div class="studio-grid">
+        <label>Number of questions
+          <select id="dayBuilderQuestionCount"><option value="10">10</option><option value="25" selected>25</option><option value="50">50</option></select>
+        </label>
+        <label>Question mix
+          <select id="dayBuilderQuestionMix">
+            <option value="balanced" selected>50% first / 50% second order</option>
+            <option value="first-heavy">70% first / 30% second order</option>
+            <option value="second-heavy">30% first / 70% second order</option>
+            <option value="first-only">First order only</option>
+            <option value="second-only">Second order only</option>
+          </select>
+        </label>
+      </div>
+      <div class="actions">
+        <button id="dayBuilderGenerate" type="button">Generate questions</button>
+        <button id="dayBuilderAddNext" type="button" class="secondary">+ Add another day</button>
+        <button id="dayBuilderDone" type="button" class="secondary">Done</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div id="questionEditModal" class="modal-backdrop hide" aria-hidden="true">
   <div class="modal-card modal-card-wide" role="dialog" aria-modal="true" aria-labelledby="questionEditTitle">
     <div class="topline"><h2 id="questionEditTitle">Edit question</h2><button id="cancelQuestionEditTop" type="button" class="secondary mini-button">Close</button></div>
@@ -592,8 +654,8 @@ body.auth-locked #setup>:not(h1):not(#accountCard){display:none!important} body.
 const HEART_BANK = window.IPAP_BUILTIN_HEART.bank;
 const DEFAULT_MASTER_STREAK = 3;
 let MASTER_STREAK = DEFAULT_MASTER_STREAK;
-const APP_VERSION = "3.4.0";
-const DATA_SCHEMA_VERSION = 10;
+const APP_VERSION = "3.5.0";
+const DATA_SCHEMA_VERSION = 11;
 const QUESTION_ID_SCHEME = "immutable-v1";
 const HEART_STORAGE_KEY = "heartQuizTrainerAdaptiveProgressV1";
 const PROGRAM_NAME = "IPAP Base Study Program";
@@ -1316,6 +1378,12 @@ function updateLifetimeUI(){
   $("attemptCount").textContent=attempts;
   $("accuracy").textContent=attempts ? Math.round(corr/attempts*100)+"%" : "—";
   if($("dueCount")) $("dueCount").textContent=metricQuestions.filter(q=>retentionDue(statFor(q.id))).length;
+  if($("avgQuestionTime")){
+    const ids=new Set(metricQuestions.map(q=>q.id));
+    const timingRows=dedupTimingEvents(timingEventsCache).filter(r=>ids.has(r.question_id) && !r.excluded_from_metrics && Number.isFinite(Number(r.response_ms)) && Number(r.response_ms)>=0);
+    const avgMs=timingRows.length ? timingRows.reduce((n,r)=>n+Number(r.response_ms),0)/timingRows.length : null;
+    $("avgQuestionTime").textContent=avgMs==null ? "—" : formatQuestionTime(avgMs);
+  }
   if($("metricsScopeLabel")){
     const selectedSection=$("day")?.value || "All";
     const scope=selectedSection==="All" ? `all ${ALL.length} questions` : `${sectionDisplayName(selectedSection)} questions`;
@@ -1430,6 +1498,7 @@ function render(){
 
   markCoverageSeen(item);
   if(!item.answered && !item.shownAt) item.shownAt=new Date().toISOString();
+  activateQuestionTimer(item);
   locked=item.answered;
 
   $("counter").textContent=`Question ${index+1} of ${active.length}`;
@@ -1498,6 +1567,8 @@ function answer(choiceIndex,button){
   const item=active[index];
   if(item.answered) return;
 
+  const responseMs=stopQuestionTimer(item);
+  item.responseMs=responseMs;
   locked=true;
   item.answered=true;
   item.selected=choiceIndex;
@@ -1556,7 +1627,6 @@ function answer(choiceIndex,button){
   updateRetentionState(s,ok);
   s.lastContentRevision=Number(CURRENT_BANK_META.contentRevision)||1;
   touchStat(s,s.lastAnsweredAt);
-  const responseMs=item.shownAt ? Date.now()-isoMs(item.shownAt) : null;
   item.reviewEventId=queueReviewEvent(item,ok,s,responseMs);
   saveProgress();
   updateLifetimeUI();
@@ -1582,6 +1652,7 @@ function answer(choiceIndex,button){
 function removeCurrentBadQuestion(){
   const item=active[index];
   if(!item) return;
+  stopQuestionTimer(item);
 
   const wasAnswered=!!item.answered;
   const wasCorrect=!!item.wasCorrect;
@@ -1637,6 +1708,7 @@ function removeCurrentBadQuestion(){
 }
 
 function finish(){
+  if(active[index]) stopQuestionTimer(active[index]);
   quizInProgress=false;
   savedSession=null;
   $("quiz").classList.add("hide"); $("results").classList.remove("hide");
@@ -1779,6 +1851,13 @@ let contentLibraryAssets=[];
 let currentBankSources=[];
 let questionFlagsThisQuiz=[];
 let editingQuestionContext=null;
+let libraryUploadInProgress=false;
+let pendingLibraryUploads=[];
+let dayBuilderState=null;
+let activeQuestionTimerInterval=null;
+let currentQuestionTimerItem=null;
+let currentQuestionTimerStartedAt=null;
+let timingEventsCache=[];
 
 function loadCachedAccount(){
   try{
@@ -1822,7 +1901,7 @@ function queueReviewEvent(item,wasCorrect,s,responseMs){
   if(!accountIdForCache()) return null;
   const rows=loadReviewEventQueue();
   const eventId=uuidv4();
-  rows.push({
+  const row={
     event_id:eventId,
     bank_key:CURRENT_BANK_META.key,
     bank_id_alias:CURRENT_BANK_META.bankId,
@@ -1836,9 +1915,12 @@ function queueReviewEvent(item,wasCorrect,s,responseMs){
     learning_state:{
       streak:s.streak,inBank:s.inBank,mastered:s.mastered,
       stabilityDays:s.retentionStabilityDays,difficulty:s.retentionDifficulty,
-      nextReviewAt:s.nextReviewAt,lapses:s.retentionLapses
+      nextReviewAt:s.nextReviewAt,lapses:s.retentionLapses,
+      activeTiming:true
     }
-  });
+  };
+  rows.push(row);
+  recordTimingEvent(row);
   // Bound only the unsynced device queue; successful uploads remove events.
   saveReviewEventQueue(rows.slice(-5000));
   flushReviewEvents().catch(()=>{});
@@ -2121,13 +2203,12 @@ function renderBankSelector(){
   const sel=$("bankSelector"); if(!sel) return;
   const wanted=CURRENT_BANK_META.key;
   sel.innerHTML="";
-  const heart=document.createElement("option"); heart.value=BUILTIN_HEART_BANK_KEY; heart.textContent="Heart — built-in core bank"; sel.appendChild(heart);
+  const heart=document.createElement("option"); heart.value=BUILTIN_HEART_BANK_KEY; heart.textContent="Heart"; sel.appendChild(heart);
   const locals=Object.entries(localBankLibrary).map(([key,entry])=>bankEntryFromLocal(key,entry)).sort((a,b)=>a.package.name.localeCompare(b.package.name));
-  locals.forEach(entry=>{ const o=document.createElement("option"); o.value=entry.key; o.textContent=`${entry.package.name} — local personal`; sel.appendChild(o); });
+  locals.forEach(entry=>{ const o=document.createElement("option"); o.value=entry.key; o.textContent=entry.package.name; sel.appendChild(o); });
   [...cloudBankLibrary.values()].sort((a,b)=>a.package.name.localeCompare(b.package.name)).forEach(entry=>{
     const o=document.createElement("option"); o.value=entry.key;
-    const suffix=entry.meta.permission==="owner" ? "mine" : entry.meta.permission==="editor" ? "shared editable" : "shared read-only";
-    o.textContent=`${entry.package.name} — ${suffix}`; sel.appendChild(o);
+    o.textContent=entry.package.name; sel.appendChild(o);
   });
   if(currentUser && sbClient){ const add=document.createElement("option"); add.value="__ADD_BANK__"; add.textContent="+ Add new bank"; add.className="bank-selector-add"; sel.appendChild(add); }
   sel.value=[...sel.options].some(o=>o.value===wanted) ? wanted : BUILTIN_HEART_BANK_KEY;
@@ -2187,6 +2268,7 @@ async function activateBankByKey(key,{syncCloud=true,saveCurrent=true,rememberSe
   renderBankSelector();
   if($("bankSelector")){ $("bankSelector").value=key; syncBankSelectorUI(); }
   updateActiveBankUI();
+  loadTimingMetricsForCurrentBank().catch(()=>{ timingEventsCache=[]; updateLifetimeUI(); });
   if(rememberSelection){
     userPreferences.lastBankKey=key;
     saveLocalPreferences();
@@ -2306,7 +2388,7 @@ async function handleAuthSession(session,event=""){
       loadProgress();
     }
     userPreferences={...DEFAULT_USER_PREFERENCES}; loadLocalPreferences(); applyPreferencesToUI(true);
-    contentLibraryAssets=[]; currentBankSources=[]; renderContentLibraryList();
+    contentLibraryAssets=[]; currentBankSources=[]; timingEventsCache=[]; renderContentLibraryList();
     cloudBankLibrary.clear(); renderBankSelector(); updateActiveBankUI(); renderAuthUI();
     return;
   }
@@ -2330,6 +2412,7 @@ async function handleAuthSession(session,event=""){
   }
   if(CURRENT_BANK_META.kind!=="local") await syncCurrentBankFromCloud();
   await flushReviewEvents().catch(()=>{});
+  await loadTimingMetricsForCurrentBank().catch(()=>{});
   setCloudStatus(CURRENT_BANK_META.kind==="local" ? `${CURRENT_BANK_META.name} remains local to this device until you move it to cloud.` : `Synced ${CURRENT_BANK_META.name} progress for this account.`,"good");
 }
 async function authSignIn(){
@@ -2941,7 +3024,7 @@ async function openAttachSourceModal(){
   if(!canEditCurrentCloudBank()) return alert("Open a bank you own or can edit first.");
   await refreshContentLibrary(); await refreshBankMaterials();
   const attached=new Set(currentBankSources.filter(x=>x.assetId).map(x=>String(x.assetId)));
-  const choices=contentLibraryAssets.filter(a=>!attached.has(String(a.id)));
+  const choices=contentLibraryAssets.filter(a=>String(a.inspection_status)==="ready"&&!attached.has(String(a.id)));
   const holder=$("attachSourceList"); if(holder) holder.innerHTML=choices.length?choices.map(a=>libraryChoiceHtml(a,"data-attach-asset")).join(""):'<p>All of your uploaded material is already attached to this bank.</p>';
   if($("confirmAttachSources")) $("confirmAttachSources").disabled=!choices.length;
   openModal("attachSourceModal");
@@ -2963,7 +3046,7 @@ async function refreshBankMaterials(){
     const {data:assets,error:assetError}=await sbClient.from("content_library_assets").select("id,storage_path,name,file_ext,unit,unit_count,size_bytes,inspection_status").in("id",ids);
     if(assetError) throw assetError;
     const linkMap=new Map((links||[]).map(x=>[String(x.asset_id),x]));
-    currentBankSources.push(...(assets||[]).map(a=>({kind:"library",assetId:a.id,path:a.storage_path,name:a.name,type:a.file_ext,unit:a.unit,count:a.unit_count,size:a.size_bytes,created_at:linkMap.get(String(a.id))?.created_at})));
+    currentBankSources.push(...(assets||[]).map(a=>({kind:"library",assetId:a.id,path:a.storage_path,name:a.name,type:a.file_ext,unit:a.unit,count:a.unit_count,size:a.size_bytes,inspectionStatus:a.inspection_status,created_at:linkMap.get(String(a.id))?.created_at})));
   }
   // Keep legacy v3.1-v3.3 bank-specific uploads usable.
   try{
@@ -3276,7 +3359,10 @@ async function excludeCurrentAttemptFromMetrics(item,reason="invalid_question"){
   if(item.reviewEventId){
     const eventId=item.reviewEventId;
     saveReviewEventQueue(loadReviewEventQueue().filter(r=>r?.event_id!==eventId));
-    if(sbClient&&currentUser) sbClient.rpc("exclude_review_event",{p_event_id:eventId,p_reason:reason}).catch(()=>{});
+    timingEventsCache=timingEventsCache.filter(r=>String(r?.event_id)!==String(eventId));
+    if(sbClient&&currentUser){
+      try{ await sbClient.rpc("exclude_review_event",{p_event_id:eventId,p_reason:reason}); }catch(e){ console.warn("Could not exclude review event",e); }
+    }
   }
   item.answered=false; item.selected=null; item.wasCorrect=null; item.preAnswerStat=null; item.reviewEventId=null; item.shownAt=new Date().toISOString();
   locked=false;
@@ -3411,21 +3497,555 @@ function openReviewQueueFromResults(){
   refreshQuestionReviewQueue().catch(e=>alert(e.message));
 }
 
+
+// ---------------- v3.5 guided workflow / reliability / timing ----------------
+function cleanUserMessage(message,fallback="Something went wrong. Please try again."){
+  const raw=String(message||"").trim();
+  const low=raw.toLowerCase();
+  if(!raw) return fallback;
+  if(low.includes("edge function") || low.includes("non-2xx")) return fallback;
+  if(low.includes("storage object") && (low.includes("not found")||low.includes("does not exist"))) return "This source file is missing. Upload it again.";
+  if(low.includes("one or more selected sources") && low.includes("not ready")) return "One of the selected files has not finished processing yet.";
+  if(low.includes("duplicate key") || low.includes("content_library_assets_owner_hash_active_uidx")) return "This file is already in your Content Library.";
+  if(low.includes("jwt") || low.includes("authentication required")) return "Your sign-in session expired. Sign in again and retry.";
+  if(low.includes("failed to fetch") || low.includes("network")) return "The network connection was interrupted. Please try again.";
+  if(low.includes("could not read") && low.includes("source")) return "This source file could not be opened. Upload it again.";
+  if(low.includes("source was not found") || low.includes("source not found")) return "This source file is no longer available. Upload it again.";
+  if(low.includes("column ") || low.includes("rpc(") || low.includes("supabase") || low.includes("postgres")) return fallback;
+  return raw.length>260 ? fallback : raw;
+}
+function showUserError(error,fallback){
+  console.error(error);
+  alert(cleanUserMessage(error?.message||error,fallback));
+}
+async function functionErrorDetail(error){
+  try{
+    const response=error?.context;
+    if(response?.clone){
+      const payload=await response.clone().json();
+      return payload?.error||payload?.message||"";
+    }
+  }catch(e){}
+  return error?.message||"";
+}
+async function invokeStudyFunction(body,fallback="Could not complete that step. Please try again."){
+  const {data,error}=await sbClient.functions.invoke("generate-study-questions",{body});
+  if(error){
+    const detail=await functionErrorDetail(error);
+    throw new Error(cleanUserMessage(detail||error.message,fallback));
+  }
+  if(data?.error) throw new Error(cleanUserMessage(data.error,fallback));
+  return data||{};
+}
+function setLibraryUploadStatus(text,{busy=true,hide=false}={}){
+  const box=$("libraryUploadStatus"),label=$("libraryUploadStatusText"),spinner=box?.querySelector(".status-spinner");
+  if(!box||!label) return;
+  box.classList.toggle("hide",!!hide);
+  label.textContent=text||"";
+  spinner?.classList.toggle("hide",!busy);
+}
+async function fileSha256(file){
+  const bytes=await file.arrayBuffer();
+  const digest=await crypto.subtle.digest("SHA-256",bytes);
+  return [...new Uint8Array(digest)].map(b=>b.toString(16).padStart(2,"0")).join("");
+}
+function renderContentLibraryList(){
+  const holder=$("contentLibraryList"); if(!holder) return;
+  if(!currentUser){ holder.innerHTML="<p>Sign in to use your Content Library.</p>"; return; }
+  const pending=pendingLibraryUploads.map(a=>({...a,_clientPending:true}));
+  const rows=[...pending,...contentLibraryAssets];
+  if(!rows.length){ holder.innerHTML="<p>No material uploaded yet. Upload a PDF or PowerPoint to get started.</p>"; return; }
+  holder.innerHTML=rows.map(a=>{
+    const status=String(a._clientStatus||a.inspection_status||"ready");
+    let stateText="",stateClass="pending";
+    if(status==="uploading"){ stateText="Uploading…"; stateClass="pending"; }
+    else if(status==="pending"){ stateText="Processing slides…"; stateClass="pending"; }
+    else if(status==="failed"){ stateText="Couldn’t process this file"; stateClass="failed"; }
+    else{
+      stateClass="ready";
+      stateText=a.unit_count!=null ? `${Number(a.unit_count)} ${escapeHtml(a.unit||"page")}${Number(a.unit_count)===1?"":"s"}` : "Ready";
+    }
+    const used=a.usedByCount ? ` • used by ${a.usedByCount} bank${a.usedByCount===1?"":"s"}` : "";
+    const pendingRow=a._clientPending||status==="uploading"||status==="pending";
+    return `<div class="library-item ${pendingRow?"uploading":""}" data-library-id="${escapeHtml(a.id||a.clientId||"")}"><div class="library-item-main"><div class="library-item-name">${escapeHtml(a.name)}</div><div class="section-help"><span class="library-state ${stateClass}">${stateText}</span>${used}</div></div><div class="library-item-actions">${(!pendingRow&&status==="ready")?`<button type="button" class="secondary mini-button" data-library-open="${escapeHtml(a.id)}">Open</button>`:""}${(!pendingRow)?`<button type="button" class="secondary mini-button" data-library-delete="${escapeHtml(a.id)}">Delete</button>`:""}</div></div>`;
+  }).join("");
+}
+async function refreshContentLibrary(){
+  const holder=$("contentLibraryList");
+  if(!sbClient||!currentUser){ contentLibraryAssets=[]; if(holder) holder.innerHTML="<p>Sign in to use your Content Library.</p>"; return []; }
+  const {data:assets,error}=await sbClient.from("content_library_assets")
+    .select("id,owner_id,storage_path,name,file_ext,mime_type,size_bytes,content_hash,unit,unit_count,inspection_status,inspection_error,created_at,updated_at")
+    .eq("owner_id",currentUser.id).order("created_at",{ascending:false});
+  if(error) throw error;
+  const ids=(assets||[]).map(x=>x.id);
+  let usage=[];
+  if(ids.length){
+    const {data,error:usageError}=await sbClient.from("bank_sources").select("asset_id,bank_id").in("asset_id",ids);
+    if(!usageError) usage=data||[];
+  }
+  const countMap=new Map();
+  for(const row of usage||[]) countMap.set(String(row.asset_id),(countMap.get(String(row.asset_id))||0)+1);
+  contentLibraryAssets=(assets||[]).map(a=>({...a,usedByCount:countMap.get(String(a.id))||0}));
+  renderContentLibraryList();
+  return contentLibraryAssets;
+}
+async function uploadLibraryMaterials(){
+  if(libraryUploadInProgress) return;
+  if(!sbClient||!currentUser) return alert("Sign in first.");
+  const input=$("libraryMaterialFile"); const files=[...(input?.files||[])];
+  if(!files.length) return alert("Choose one or more files first.");
+  const allowed=new Set(["pdf","pptx","docx","txt","md"]);
+  libraryUploadInProgress=true;
+  const btn=$("uploadLibraryMaterial");
+  if(btn){btn.disabled=true;btn.textContent="Uploading…";}
+  if(input) input.disabled=true;
+  setLibraryUploadStatus(`Preparing ${files.length} file${files.length===1?"":"s"}…`,{busy:true});
+  let success=0,skipped=0,failed=0;
+  try{
+    await refreshContentLibrary();
+    for(let fileIndex=0;fileIndex<files.length;fileIndex++){
+      const file=files[fileIndex];
+      const ext=(file.name.split(".").pop()||"").toLowerCase();
+      if(!allowed.has(ext)){ failed++; setLibraryUploadStatus(`${file.name} isn’t supported. Use PDF, PPTX, DOCX, TXT, or MD.`,{busy:false}); continue; }
+      setLibraryUploadStatus(`Checking ${file.name}…`,{busy:true});
+      const hash=await fileSha256(file);
+      const duplicate=contentLibraryAssets.find(a=>a.content_hash===hash && ["uploading","pending","ready"].includes(String(a.inspection_status||"ready")));
+      const duplicatePending=pendingLibraryUploads.find(a=>a.content_hash===hash);
+      if(duplicate||duplicatePending){ skipped++; setLibraryUploadStatus(`${file.name} is already in your Content Library.`,{busy:false}); continue; }
+
+      const id=uuidv4(),path=`library/${id}/${sanitizeFilename(file.name)}`,clientId=`pending:${id}`;
+      const pending={clientId,id,name:file.name,size_bytes:file.size,content_hash:hash,_clientStatus:"uploading"};
+      pendingLibraryUploads.unshift(pending); renderContentLibraryList();
+      setLibraryUploadStatus(`Uploading ${file.name} (${fileIndex+1} of ${files.length})…`,{busy:true});
+      let metadataCreated=false;
+      try{
+        const row={id,owner_id:currentUser.id,storage_path:path,name:file.name,file_ext:ext,mime_type:file.type||"",size_bytes:file.size,content_hash:hash,inspection_status:"uploading",updated_at:new Date().toISOString()};
+        const {error:metaError}=await sbClient.from("content_library_assets").insert(row);
+        if(metaError) throw metaError;
+        metadataCreated=true;
+        const {error:uploadError}=await sbClient.storage.from("bank-materials").upload(path,file,{upsert:false});
+        if(uploadError) throw uploadError;
+        await sbClient.from("content_library_assets").update({inspection_status:"pending",inspection_error:null,updated_at:new Date().toISOString()}).eq("id",id).eq("owner_id",currentUser.id);
+        pending._clientStatus="pending"; renderContentLibraryList();
+        setLibraryUploadStatus(`Processing slides in ${file.name}…`,{busy:true});
+        const inspected=await invokeStudyFunction({action:"inspect_library",assetIds:[id]},"This file didn’t finish processing. Please upload it again.");
+        const result=(inspected.materials||[]).find(x=>String(x.id)===String(id));
+        if(!result || result.error) throw new Error(result?.error||"This file didn’t finish processing. Please upload it again.");
+        success++;
+      }catch(e){
+        failed++;
+        try{ await sbClient.storage.from("bank-materials").remove([path]); }catch(_){}
+        if(metadataCreated){
+          try{ await sbClient.rpc("delete_library_asset",{p_asset_id:id}); }catch(_){}
+        }
+        setLibraryUploadStatus(cleanUserMessage(e?.message||e,`Couldn’t upload ${file.name}. Please try again.`),{busy:false});
+      }finally{
+        pendingLibraryUploads=pendingLibraryUploads.filter(x=>x.clientId!==clientId);
+        await refreshContentLibrary().catch(()=>renderContentLibraryList());
+      }
+    }
+    if(input) input.value="";
+    if(success){
+      const extra=skipped?` ${skipped} duplicate${skipped===1?" was":"s were"} skipped.`:"";
+      setLibraryUploadStatus(`${success} file${success===1?" is":"s are"} ready.${extra}`,{busy:false});
+    }else if(!failed && skipped){
+      setLibraryUploadStatus("No duplicate files were uploaded.",{busy:false});
+    }else if(!failed){
+      setLibraryUploadStatus("No new files were uploaded.",{busy:false});
+    }
+  }finally{
+    libraryUploadInProgress=false;
+    if(btn){btn.disabled=false;btn.textContent="Upload material";}
+    if(input) input.disabled=false;
+    await refreshContentLibrary().catch(()=>{});
+  }
+}
+async function deleteLibraryAsset(assetId){
+  const asset=contentLibraryAssets.find(a=>String(a.id)===String(assetId)); if(!asset) return;
+  if(asset.usedByCount) return alert(`This material is being used by ${asset.usedByCount} study bank${asset.usedByCount===1?"":"s"}. Remove it from those banks before deleting it.`);
+  if(!confirm(`Delete “${asset.name}”?`)) return;
+  const prior=[...contentLibraryAssets];
+  contentLibraryAssets=contentLibraryAssets.filter(a=>String(a.id)!==String(asset.id));
+  renderContentLibraryList();
+  try{
+    const {error:removeError}=await sbClient.storage.from("bank-materials").remove([asset.storage_path]);
+    if(removeError) throw removeError;
+    const {error}=await sbClient.rpc("delete_library_asset",{p_asset_id:asset.id});
+    if(error) throw error;
+    setLibraryUploadStatus(`${asset.name} deleted.`,{busy:false});
+  }catch(e){
+    contentLibraryAssets=prior; renderContentLibraryList();
+    showUserError(e,"Couldn’t delete this file. Please try again.");
+  }
+}
+function libraryChoiceHtml(a,attr,checked=false){
+  const count=a.unit_count!=null?`${Number(a.unit_count)} ${escapeHtml(a.unit||"page")}${Number(a.unit_count)===1?"":"s"}`:"Ready";
+  return `<label class="modal-choice"><input type="checkbox" ${attr}="${escapeHtml(a.id)}" ${checked?"checked":""}><span><strong>${escapeHtml(a.name)}</strong><br><span class="section-help">${count}</span></span></label>`;
+}
+async function quickAddNewBank(){
+  if(!sbClient||!currentUser) return alert("Sign in first.");
+  await refreshContentLibrary();
+  const ready=contentLibraryAssets.filter(a=>String(a.inspection_status)==="ready");
+  const holder=$("newBankSourceList");
+  if(holder) holder.innerHTML=ready.length ? ready.map(a=>libraryChoiceHtml(a,"data-new-bank-asset")).join("") :
+    (contentLibraryAssets.length?'<p>Your uploaded material is still processing. Wait until it shows <strong>Ready</strong>, then try again.</p>':'<p>Upload material to your Content Library first, then create a bank.</p>');
+  if($("guidedBankName")) $("guidedBankName").value="";
+  if($("guidedBankDescription")) $("guidedBankDescription").value="";
+  if($("createGuidedBank")) $("createGuidedBank").disabled=!ready.length;
+  openModal("newBankModal"); setTimeout(()=>$("guidedBankName")?.focus(),50);
+}
+async function createGuidedBank(){
+  const name=String($("guidedBankName")?.value||"").trim();
+  const description=String($("guidedBankDescription")?.value||"").trim();
+  const assetIds=[...document.querySelectorAll("[data-new-bank-asset]:checked")].map(x=>x.getAttribute("data-new-bank-asset")).filter(Boolean);
+  if(!name) return alert("Enter a bank name.");
+  if(!assetIds.length) return alert("Choose at least one ready source from your Content Library.");
+  const btn=$("createGuidedBank"); if(btn) btn.disabled=true;
+  try{
+    const {data,error}=await sbClient.rpc("create_study_bank_from_assets",{p_name:name,p_subject:name,p_description:description,p_asset_ids:assetIds});
+    if(error) throw error;
+    const row=Array.isArray(data)?data[0]:data; const id=row?.bank_id||row;
+    closeModal("newBankModal");
+    await loadCloudBanks(); renderBankSelector();
+    const key=`cloud:${id}`; if(!cloudBankLibrary.has(key)) throw new Error("Bank was created but could not be loaded.");
+    await activateBankByKey(key,{syncCloud:false,saveCurrent:false});
+    await refreshBankMaterials();
+    await openDayBuilderForNew();
+  }catch(e){
+    showUserError(e,"Couldn’t create this bank. Please try again.");
+  }finally{ if(btn) btn.disabled=false; }
+}
+async function inspectMaterialPaths(paths){
+  const missing=paths.filter(path=>!materialInspectionCache.has(path));
+  if(missing.length){
+    const data=await invokeStudyFunction({action:"inspect",bankId:CURRENT_BANK_META.dbId,sourcePaths:missing},"This source file couldn’t be opened. Upload it again.");
+    for(const x of data?.materials||[]) materialInspectionCache.set(x.path,x);
+  }
+  return paths.map(path=>materialInspectionCache.get(path)).filter(Boolean);
+}
+function sourceFromPath(path){
+  return currentBankSources.find(x=>x.path===path) || null;
+}
+async function ensureSourceInfo(source){
+  if(!source) return null;
+  if(source.count!=null && source.unit) return source;
+  const rows=await inspectMaterialPaths([source.path]);
+  const info=rows[0];
+  if(info){
+    source.count=info.count; source.unit=info.unit; source.type=info.type||source.type;
+  }
+  return source;
+}
+function resetDayBuilderAfterSave(){
+  $("dayBuilderAfterSave")?.classList.add("hide");
+  $("dayBuilderBeforeSave")?.classList.remove("hide");
+  if($("dayBuilderProgress")) $("dayBuilderProgress").textContent="";
+}
+async function openDayBuilderForNew(prefilledName=""){
+  if(!canEditCurrentCloudBank()) return alert("Open a study bank you can edit first.");
+  await refreshBankMaterials();
+  const usable=currentBankSources.filter(x=>x.kind!=="library" || x.inspectionStatus==="ready");
+  if(!usable.length) return alert("This bank doesn’t have any ready source material yet.");
+  const defaultName=prefilledName||`Day ${currentSectionEntries().length+1}`;
+  dayBuilderState={mode:"new",sectionKey:null,assignmentIndex:null,extraRanges:[],sources:usable};
+  if($("dayBuilderTitle")) $("dayBuilderTitle").textContent=`Set up ${defaultName}`;
+  if($("dayBuilderName")) $("dayBuilderName").value=defaultName;
+  const sel=$("dayBuilderSource");
+  if(sel) sel.innerHTML=usable.map(x=>`<option value="${escapeHtml(x.path)}">${escapeHtml(x.name)}</option>`).join("");
+  resetDayBuilderAfterSave();
+  openModal("dayBuilderModal");
+  await loadDayBuilderSource();
+}
+async function openDayBuilderForAssignment(index=0){
+  const meta=selectedSectionMeta(); if(!meta||!canEditCurrentCloudBank()) return;
+  await refreshBankMaterials();
+  const assignments=Array.isArray(meta.source_assignments)?meta.source_assignments:[];
+  const row=assignments[index];
+  if(!row) return openDayBuilderForExistingSection(meta);
+  const usable=currentBankSources.filter(x=>x.kind!=="library" || x.inspectionStatus==="ready");
+  dayBuilderState={mode:"edit",sectionKey:meta.section_key,assignmentIndex:index,extraRanges:(row.ranges||[]).slice(1),sources:usable};
+  if($("dayBuilderTitle")) $("dayBuilderTitle").textContent=`Edit ${meta.name}`;
+  if($("dayBuilderName")) $("dayBuilderName").value=meta.name;
+  const sel=$("dayBuilderSource");
+  if(sel){
+    sel.innerHTML=usable.map(x=>`<option value="${escapeHtml(x.path)}">${escapeHtml(x.name)}</option>`).join("");
+    sel.value=row.path;
+  }
+  resetDayBuilderAfterSave();
+  openModal("dayBuilderModal");
+  await loadDayBuilderSource(row);
+}
+async function openDayBuilderForExistingSection(meta=selectedSectionMeta()){
+  if(!meta) return openDayBuilderForNew();
+  const rows=Array.isArray(meta.source_assignments)?meta.source_assignments:[];
+  if(rows.length) return openDayBuilderForAssignment(0);
+  await refreshBankMaterials();
+  const usable=currentBankSources.filter(x=>x.kind!=="library" || x.inspectionStatus==="ready");
+  if(!usable.length) return alert("This bank doesn’t have any ready source material yet.");
+  dayBuilderState={mode:"existing",sectionKey:meta.section_key,assignmentIndex:null,extraRanges:[],sources:usable};
+  if($("dayBuilderTitle")) $("dayBuilderTitle").textContent=`Set up ${meta.name}`;
+  if($("dayBuilderName")) $("dayBuilderName").value=meta.name;
+  const sel=$("dayBuilderSource");
+  if(sel) sel.innerHTML=usable.map(x=>`<option value="${escapeHtml(x.path)}">${escapeHtml(x.name)}</option>`).join("");
+  resetDayBuilderAfterSave();
+  openModal("dayBuilderModal");
+  await loadDayBuilderSource();
+}
+async function loadDayBuilderSource(existingRow=null){
+  if(!dayBuilderState) return;
+  const path=$("dayBuilderSource")?.value || dayBuilderState.sources?.[0]?.path;
+  let source=sourceFromPath(path) || dayBuilderState.sources?.find(x=>x.path===path);
+  if(!source) return;
+  if($("dayBuilderViewerStatus")) $("dayBuilderViewerStatus").textContent=`Preparing ${source.name}…`;
+  try{ source=await ensureSourceInfo(source); }
+  catch(e){ showUserError(e,"This source file couldn’t be opened. Upload it again."); return; }
+  const max=Math.max(1,Number(source.count)||1);
+  const existing=existingRow || (dayBuilderState.mode==="edit" ? selectedSectionMeta()?.source_assignments?.[dayBuilderState.assignmentIndex] : null);
+  const firstRange=existing?.path===path && Array.isArray(existing.ranges)&&existing.ranges.length ? existing.ranges[0] : [1,max];
+  if($("dayBuilderStart")){ $("dayBuilderStart").max=String(max); $("dayBuilderStart").value=String(Math.max(1,Number(firstRange?.[0])||1)); }
+  if($("dayBuilderEnd")){ $("dayBuilderEnd").max=String(max); $("dayBuilderEnd").value=String(Math.min(max,Math.max(1,Number(firstRange?.[1])||max))); }
+  dayBuilderState.source=source;
+  updateDayBuilderRangeSummary();
+  await loadDayBuilderPreview(source);
+}
+async function loadDayBuilderPreview(source){
+  const frame=$("dayBuilderViewer"),placeholder=$("dayBuilderViewerPlaceholder"),status=$("dayBuilderViewerStatus");
+  if(frame){ frame.classList.add("hide"); frame.src="about:blank"; }
+  if(placeholder){ placeholder.classList.remove("hide"); placeholder.textContent="Preparing your source preview…"; }
+  try{
+    const {data,error}=await sbClient.storage.from("bank-materials").createSignedUrl(source.path,3600);
+    if(error||!data?.signedUrl) throw error||new Error("Preview unavailable");
+    const type=String(source.type||"").toLowerCase();
+    let url=data.signedUrl;
+    if(["pptx","docx"].includes(type)) url=`https://view.officeapps.live.com/op/embed.aspx?src=${encodeURIComponent(data.signedUrl)}`;
+    else if(type==="pdf") url=`${data.signedUrl}#page=1&view=FitH`;
+    if(frame){ frame.src=url; frame.classList.remove("hide"); }
+    if(placeholder) placeholder.classList.add("hide");
+    if(status) status.textContent=source.count ? `Scroll through ${source.count} ${source.unit}${Number(source.count)===1?"":"s"} for visual confirmation, then set the range below.` : "Scroll through the source for visual confirmation.";
+  }catch(e){
+    if(placeholder){ placeholder.classList.remove("hide"); placeholder.innerHTML=`Preview couldn’t load here. <button type="button" id="dayBuilderOpenFallback" class="secondary mini-button">Open source</button>`; }
+    if(status) status.textContent="You can still enter the slide/page range below.";
+    setTimeout(()=>$("dayBuilderOpenFallback")?.addEventListener("click",()=>openStoragePath(source.path).catch(err=>showUserError(err,"Couldn’t open this source."))),0);
+  }
+}
+function updateDayBuilderRangeSummary(){
+  const source=dayBuilderState?.source; if(!source) return;
+  const max=Math.max(1,Number(source.count)||1);
+  let start=Math.max(1,Math.min(max,Number($("dayBuilderStart")?.value)||1));
+  let end=Math.max(1,Math.min(max,Number($("dayBuilderEnd")?.value)||max));
+  if(end<start)[start,end]=[end,start];
+  const unit=source.unit||"page/slide";
+  if($("dayBuilderRangeSummary")) $("dayBuilderRangeSummary").textContent=`${unit.charAt(0).toUpperCase()+unit.slice(1)}s ${start}–${end} selected from ${source.name}.`;
+}
+async function saveDayBuilder(){
+  if(!dayBuilderState||!dayBuilderState.source) return;
+  const name=String($("dayBuilderName")?.value||"").trim();
+  if(!name) return alert("Enter a day name.");
+  const source=dayBuilderState.source,max=Math.max(1,Number(source.count)||1);
+  let start=Math.max(1,Math.min(max,Number($("dayBuilderStart")?.value)||1));
+  let end=Math.max(1,Math.min(max,Number($("dayBuilderEnd")?.value)||max));
+  if(end<start)[start,end]=[end,start];
+  const btn=$("saveDayBuilder"); if(btn) btn.disabled=true;
+  if($("dayBuilderProgress")) $("dayBuilderProgress").textContent="Saving day…";
+  try{
+    let sectionKey=dayBuilderState.sectionKey;
+    if(dayBuilderState.mode==="new"){
+      const {data,error}=await sbClient.rpc("create_bank_section",{p_bank_id:CURRENT_BANK_META.dbId,p_name:name});
+      if(error) throw error;
+      const row=Array.isArray(data)?data[0]:data; sectionKey=row?.section_key||row;
+      const key=CURRENT_BANK_META.key;
+      await loadCloudBanks(); await activateBankByKey(key,{syncCloud:false,saveCurrent:false});
+      if($("day")){ $("day").value=sectionKey; syncDaySelectorUI(); }
+    }else{
+      const meta=currentSectionEntries().find(x=>x.section_key===sectionKey);
+      if(meta && meta.name!==name){
+        const {error}=await sbClient.rpc("rename_bank_section",{p_bank_id:CURRENT_BANK_META.dbId,p_section_key:sectionKey,p_name:name});
+        if(error) throw error;
+        const key=CURRENT_BANK_META.key;
+        await loadCloudBanks(); await activateBankByKey(key,{syncCloud:false,saveCurrent:false});
+        if($("day")){ $("day").value=sectionKey; syncDaySelectorUI(); }
+      }
+    }
+    const meta=currentSectionEntries().find(x=>x.section_key===sectionKey) || selectedSectionMeta();
+    if(!meta) throw new Error("The day was saved but could not be reopened.");
+    const rows=[...(meta.source_assignments||[])];
+    const linked=currentBankSources.find(x=>x.path===source.path);
+    const assignment={path:source.path,assetId:source.assetId||linked?.assetId||null,name:source.name,type:source.type,unit:source.unit,count:source.count||null,ranges:[[start,end],...(dayBuilderState.extraRanges||[])]};
+    if(dayBuilderState.mode==="edit" && Number.isInteger(dayBuilderState.assignmentIndex) && rows[dayBuilderState.assignmentIndex]){
+      rows[dayBuilderState.assignmentIndex]=assignment;
+    }else{
+      const same=rows.findIndex(x=>x.path===source.path);
+      if(same>=0) rows[same]=assignment; else rows.push(assignment);
+    }
+    const saved=await saveSectionAssignments(meta,rows,{offerRebuild:false});
+    if(saved===false) return;
+    dayBuilderState={...dayBuilderState,mode:"saved",sectionKey,assignmentIndex:rows.findIndex(x=>x.path===source.path)};
+    if($("day")){ $("day").value=sectionKey; syncDaySelectorUI(); updateLifetimeUI(); updateCoverageStatus(); }
+    if($("dayBuilderSavedText")) $("dayBuilderSavedText").textContent=`${name} saved — ${source.unit||"slide/page"}s ${start}–${end}.`;
+    $("dayBuilderBeforeSave")?.classList.add("hide");
+    $("dayBuilderAfterSave")?.classList.remove("hide");
+    if($("dayBuilderProgress")) $("dayBuilderProgress").textContent="Ready to generate questions.";
+  }catch(e){
+    showUserError(e,"Couldn’t save this day. Please try again.");
+    if($("dayBuilderProgress")) $("dayBuilderProgress").textContent="";
+  }finally{ if(btn) btn.disabled=false; }
+}
+async function createNewDay(prefilledName=""){
+  return openDayBuilderForNew(prefilledName);
+}
+async function editDayAssignment(index){
+  return openDayBuilderForAssignment(index);
+}
+async function generateDraftQuestionsFromSources(){
+  if(!sbClient||!currentUser||!canEditCurrentCloudBank()) return alert("Open a study bank you can edit first.");
+  const section=selectedSectionMeta(); if(!section) return alert("Choose a specific day first.");
+  const assignments=Array.isArray(section.source_assignments)?section.source_assignments:[];
+  if(!assignments.length) return alert(`Choose the slides for ${section.name} before generating questions.`);
+  const sourcePaths=assignments.map(a=>a.path).filter(Boolean);
+  const sourceRanges=assignments.map(a=>({path:a.path,ranges:Array.isArray(a.ranges)?a.ranges:[]}));
+  if(!sourcePaths.length) return alert("This day doesn’t have usable source material yet.");
+  const total=Number($("generationQuestionCount")?.value)||25, mix=$("generationQuestionMix")?.value||"balanced",counts=mixCounts(total,mix);
+  const btn=$("generateDraftQuestions"); if(btn) btn.disabled=true;
+  if($("generationStatus")) $("generationStatus").textContent=`Creating ${total} questions for ${section.name}…`;
+  try{
+    const key=CURRENT_BANK_META.key,sectionKey=section.section_key;
+    const data=await invokeStudyFunction({bankId:CURRENT_BANK_META.dbId,sectionKey,sourcePaths,sourceRanges,questionCount:total,firstOrderCount:counts.first,secondOrderCount:counts.second},"Questions couldn’t be generated from this material. Check the source file and try again.");
+    const published=Number(data?.publishedCount)||0;
+    await loadCloudBanks(); await activateBankByKey(key,{syncCloud:false,saveCurrent:false});
+    if($("day")){ $("day").value=sectionKey; syncDaySelectorUI(); updateLifetimeUI(); updateCoverageStatus(); updateDayActionState(); renderDaySourceAssignments(); }
+    if($("generationStatus")) $("generationStatus").textContent=`${published} new question${published===1?"":"s"} added to ${sectionDisplayName(sectionKey)} and ready to study.`;
+    return published;
+  }catch(e){
+    showUserError(e,"Questions couldn’t be generated. Please try again.");
+    if($("generationStatus")) $("generationStatus").textContent="Question generation didn’t finish. Your existing study content was not changed.";
+    return 0;
+  }finally{ if(btn) btn.disabled=false; updateGenerationStudioAvailability(); }
+}
+async function generateFromDayBuilder(){
+  if(!dayBuilderState?.sectionKey) return;
+  const sectionKey=dayBuilderState.sectionKey;
+  if($("day")){ $("day").value=sectionKey; syncDaySelectorUI(); }
+  if($("generationQuestionCount")) $("generationQuestionCount").value=$("dayBuilderQuestionCount")?.value||"25";
+  if($("generationQuestionMix")) $("generationQuestionMix").value=$("dayBuilderQuestionMix")?.value||"balanced";
+  const btn=$("dayBuilderGenerate"); if(btn) btn.disabled=true;
+  if($("dayBuilderProgress")) $("dayBuilderProgress").textContent="Generating source-only questions…";
+  try{
+    const published=await generateDraftQuestionsFromSources();
+    if(published){
+      if($("dayBuilderProgress")) $("dayBuilderProgress").textContent=`${published} question${published===1?"":"s"} are ready to study.`;
+      if($("dayBuilderSavedText")) $("dayBuilderSavedText").textContent=`${sectionDisplayName(sectionKey)} is ready to study.`;
+    }
+  }finally{ if(btn) btn.disabled=false; }
+}
+function formatQuestionTime(ms){
+  const total=Math.max(0,Math.round(Number(ms)||0));
+  const sec=Math.round(total/1000);
+  const minutes=Math.floor(sec/60),seconds=sec%60;
+  return `${minutes}:${String(seconds).padStart(2,"0")}`;
+}
+function dedupTimingEvents(rows){
+  const map=new Map();
+  for(const row of rows||[]){
+    if(!row?.event_id) continue;
+    map.set(String(row.event_id),row);
+  }
+  return [...map.values()];
+}
+function recordTimingEvent(row){
+  if(!row || row.bank_key!==CURRENT_BANK_META.key || row.learning_state?.activeTiming!==true || !Number.isFinite(Number(row.response_ms))) return;
+  timingEventsCache=dedupTimingEvents([...timingEventsCache,{...row,excluded_from_metrics:false}]);
+}
+async function loadTimingMetricsForCurrentBank(){
+  const local=loadReviewEventQueue().filter(r=>r?.bank_key===CURRENT_BANK_META.key && r?.learning_state?.activeTiming===true && Number.isFinite(Number(r?.response_ms))).map(r=>({...r,excluded_from_metrics:false}));
+  if(!sbClient||!currentUser){ timingEventsCache=dedupTimingEvents(local); updateLifetimeUI(); return; }
+  const {data,error}=await sbClient.from("review_events")
+    .select("event_id,question_id,response_ms,excluded_from_metrics,learning_state,answered_at")
+    .eq("user_id",currentUser.id).eq("bank_key",CURRENT_BANK_META.key).eq("excluded_from_metrics",false).not("response_ms","is",null)
+    .order("answered_at",{ascending:false}).limit(10000);
+  if(error) throw error;
+  timingEventsCache=dedupTimingEvents([...(data||[]).filter(r=>r?.learning_state?.activeTiming===true),...local]);
+  updateLifetimeUI();
+}
+function questionTimerElapsed(item){
+  if(!item) return 0;
+  let total=Math.max(0,Number(item.activeElapsedMs)||0);
+  if(item===currentQuestionTimerItem && currentQuestionTimerStartedAt!=null && document.visibilityState==="visible" && !item.answered){
+    total+=Math.max(0,performance.now()-currentQuestionTimerStartedAt);
+  }
+  return total;
+}
+function renderQuestionTimer(item=currentQuestionTimerItem){
+  if(!$("questionTimer")) return;
+  const ms=item?.answered && Number.isFinite(Number(item.responseMs)) ? Number(item.responseMs) : questionTimerElapsed(item);
+  $("questionTimer").textContent=formatQuestionTime(ms||0);
+}
+function clearQuestionTimerInterval(){
+  if(activeQuestionTimerInterval){ clearInterval(activeQuestionTimerInterval); activeQuestionTimerInterval=null; }
+}
+function pauseQuestionTimer(item=currentQuestionTimerItem){
+  if(item && item===currentQuestionTimerItem && currentQuestionTimerStartedAt!=null){
+    item.activeElapsedMs=Math.max(0,Number(item.activeElapsedMs)||0)+Math.max(0,performance.now()-currentQuestionTimerStartedAt);
+    currentQuestionTimerStartedAt=null;
+    renderQuestionTimer(item);
+  }
+  clearQuestionTimerInterval();
+  return item ? Math.max(0,Number(item.activeElapsedMs)||0) : 0;
+}
+function resumeQuestionTimer(item=currentQuestionTimerItem){
+  if(!item||item.answered||document.visibilityState!=="visible") return;
+  currentQuestionTimerItem=item;
+  if(currentQuestionTimerStartedAt==null) currentQuestionTimerStartedAt=performance.now();
+  if(!activeQuestionTimerInterval) activeQuestionTimerInterval=setInterval(()=>renderQuestionTimer(item),250);
+}
+function activateQuestionTimer(item){
+  if(currentQuestionTimerItem && currentQuestionTimerItem!==item) pauseQuestionTimer(currentQuestionTimerItem);
+  currentQuestionTimerItem=item||null;
+  if(!item){ clearQuestionTimerInterval(); renderQuestionTimer(null); return; }
+  if(!Number.isFinite(Number(item.activeElapsedMs))) item.activeElapsedMs=0;
+  if(item.answered){
+    currentQuestionTimerStartedAt=null; clearQuestionTimerInterval(); renderQuestionTimer(item); return;
+  }
+  resumeQuestionTimer(item); renderQuestionTimer(item);
+}
+function stopQuestionTimer(item=currentQuestionTimerItem){
+  const total=pauseQuestionTimer(item);
+  if(item===currentQuestionTimerItem){ currentQuestionTimerItem=null; currentQuestionTimerStartedAt=null; }
+  clearQuestionTimerInterval();
+  if(item) item.activeElapsedMs=total;
+  renderQuestionTimer(item);
+  return Math.max(0,Math.round(total));
+}
+document.addEventListener("visibilitychange",()=>{
+  if(!quizInProgress||!active[index]) return;
+  if(document.visibilityState==="hidden") pauseQuestionTimer(active[index]);
+  else if(!active[index].answered) resumeQuestionTimer(active[index]);
+});
+
 // Event wiring for account, bank library, sharing, settings, and materials.
-$("refreshContentLibrary")?.addEventListener("click",()=>refreshContentLibrary().catch(e=>alert(e.message)));
-$("uploadLibraryMaterial")?.addEventListener("click",()=>uploadLibraryMaterials().catch(e=>alert(e.message)));
+$("refreshContentLibrary")?.addEventListener("click",()=>refreshContentLibrary().catch(e=>showUserError(e,"Couldn’t refresh your Content Library.")));
+$("uploadLibraryMaterial")?.addEventListener("click",()=>uploadLibraryMaterials().catch(e=>showUserError(e,"Couldn’t upload this material. Please try again.")));
 $("contentLibraryList")?.addEventListener("click",e=>{
   const open=e.target.closest("[data-library-open]");
-  if(open){ const asset=contentLibraryAssets.find(x=>String(x.id)===String(open.getAttribute("data-library-open"))); if(asset) return openStoragePath(asset.storage_path).catch(err=>alert(err.message)); }
-  const del=e.target.closest("[data-library-delete]"); if(del) return deleteLibraryAsset(del.getAttribute("data-library-delete")).catch(err=>alert(err.message));
+  if(open){ const asset=contentLibraryAssets.find(x=>String(x.id)===String(open.getAttribute("data-library-open"))); if(asset) return openStoragePath(asset.storage_path).catch(err=>showUserError(err,"Couldn’t open this file.")); }
+  const del=e.target.closest("[data-library-delete]"); if(del) return deleteLibraryAsset(del.getAttribute("data-library-delete")).catch(err=>showUserError(err,"Couldn’t delete this file. Please try again."));
 });
-$("createGuidedBank")?.addEventListener("click",()=>createGuidedBank().catch(e=>alert(e.message)));
+$("createGuidedBank")?.addEventListener("click",()=>createGuidedBank().catch(e=>showUserError(e,"Couldn’t create this bank. Please try again.")));
 $("cancelNewBank")?.addEventListener("click",()=>closeModal("newBankModal"));
 $("cancelNewBankTop")?.addEventListener("click",()=>closeModal("newBankModal"));
-$("attachLibrarySources")?.addEventListener("click",()=>openAttachSourceModal().catch(e=>alert(e.message)));
-$("confirmAttachSources")?.addEventListener("click",()=>confirmAttachSources().catch(e=>alert(e.message)));
+$("attachLibrarySources")?.addEventListener("click",()=>openAttachSourceModal().catch(e=>showUserError(e,"Couldn’t open your Content Library.")));
+$("confirmAttachSources")?.addEventListener("click",()=>confirmAttachSources().catch(e=>showUserError(e,"Couldn’t add that material to this bank.")));
 $("cancelAttachSources")?.addEventListener("click",()=>closeModal("attachSourceModal"));
 $("cancelAttachSourceTop")?.addEventListener("click",()=>closeModal("attachSourceModal"));
+$("openGuidedDaySetup")?.addEventListener("click",()=>{ const meta=selectedSectionMeta(); (meta?openDayBuilderForExistingSection(meta):openDayBuilderForNew()).catch(e=>showUserError(e,"Couldn’t open day setup.")); });
+$("dayBuilderSource")?.addEventListener("change",()=>loadDayBuilderSource().catch(e=>showUserError(e,"Couldn’t preview this source.")));
+$("dayBuilderStart")?.addEventListener("input",updateDayBuilderRangeSummary);
+$("dayBuilderEnd")?.addEventListener("input",updateDayBuilderRangeSummary);
+$("saveDayBuilder")?.addEventListener("click",()=>saveDayBuilder().catch(e=>showUserError(e,"Couldn’t save this day.")));
+$("dayBuilderGenerate")?.addEventListener("click",()=>generateFromDayBuilder().catch(e=>showUserError(e,"Couldn’t generate questions.")));
+$("dayBuilderAddNext")?.addEventListener("click",()=>{ closeModal("dayBuilderModal"); openDayBuilderForNew().catch(e=>showUserError(e,"Couldn’t start the next day.")); });
+$("dayBuilderDone")?.addEventListener("click",()=>closeModal("dayBuilderModal"));
+$("cancelDayBuilder")?.addEventListener("click",()=>closeModal("dayBuilderModal"));
+$("closeDayBuilderTop")?.addEventListener("click",()=>closeModal("dayBuilderModal"));
 $("questionOptionsButton")?.addEventListener("click",e=>{ e.stopPropagation(); $("questionOptionsMenu")?.classList.toggle("hide"); });
 $("editQuestionNow")?.addEventListener("click",()=>openQuestionEditor(active[index]).catch(e=>alert(e.message)));
 $("markQuestionReview")?.addEventListener("click",()=>flagCurrentQuestion("review").catch(e=>alert(e.message)));
@@ -3444,7 +4064,7 @@ $("openReviewQueueAfterQuiz")?.addEventListener("click",openReviewQueueFromResul
 $("bankSelectorButton")?.addEventListener("click",e=>{ e.stopPropagation(); toggleActionSelect("bankSelector"); });
 $("bankSelectorMenu")?.addEventListener("click",async e=>{
   const add=e.target.closest("[data-add-bank]");
-  if(add){ closeActionSelect("bankSelector"); try{ await quickAddNewBank(); }catch(err){ alert(err.message); renderBankSelector(); } return; }
+  if(add){ closeActionSelect("bankSelector"); try{ await quickAddNewBank(); }catch(err){ showUserError(err,"Couldn’t start a new bank."); renderBankSelector(); } return; }
   const item=e.target.closest("[data-bank-key]"); if(!item)return;
   const key=item.getAttribute("data-bank-key"); closeActionSelect("bankSelector");
   try{ await activateBankByKey(key); }catch(err){ alert(err.message); renderBankSelector(); }
@@ -3452,7 +4072,7 @@ $("bankSelectorMenu")?.addEventListener("click",async e=>{
 $("daySelectorButton")?.addEventListener("click",e=>{ e.stopPropagation(); toggleActionSelect("daySelector"); });
 $("daySelectorMenu")?.addEventListener("click",async e=>{
   const add=e.target.closest("[data-add-day]");
-  if(add){ closeActionSelect("daySelector"); try{ await createNewDay(); }catch(err){ alert(err.message); refreshFilterSelectors(); } return; }
+  if(add){ closeActionSelect("daySelector"); try{ await createNewDay(); }catch(err){ showUserError(err,"Couldn’t create a new day."); refreshFilterSelectors(); } return; }
   const item=e.target.closest("[data-day-key]"); if(!item)return;
   const key=item.getAttribute("data-day-key"); closeActionSelect("daySelector");
   const sel=$("day"); if(!sel)return; sel.value=key; syncDaySelectorUI(); sel.dispatchEvent(new Event("change",{bubbles:true}));
@@ -3578,6 +4198,7 @@ $("start").addEventListener("click",()=>startQuiz());
 $("studyBank").addEventListener("click",startBank);
 $("prev").addEventListener("click",()=>{
   if(index>0){
+    if(active[index]) pauseQuestionTimer(active[index]);
     index--;
     render();
     saveProgress();
@@ -3585,6 +4206,7 @@ $("prev").addEventListener("click",()=>{
 });
 $("next").addEventListener("click",()=>{
   if(!active[index] || !active[index].answered) return;
+  pauseQuestionTimer(active[index]);
   if(index>=active.length-1) finish();
   else{
     index++;

@@ -1,4 +1,4 @@
-const CACHE_NAME = "ipap-base-study-program-v3.4.0";
+const CACHE_NAME = "ipap-base-study-program-v3.5.0";
 const CORE_ASSETS = [
   "./",
   "./index.html",
@@ -46,20 +46,15 @@ self.addEventListener("fetch", event => {
   const request = event.request;
   if (request.method !== "GET") return;
   const url = new URL(request.url);
-
-  // Never cache Supabase/API/CDN traffic; cloud data must come from the network/auth client.
   if (url.origin !== self.location.origin) return;
-
   if (request.mode === "navigate") {
     event.respondWith(networkFirst(request).catch(() => caches.match("./index.html")));
     return;
   }
-
   if (url.pathname.endsWith("/supabase-config.js") || url.pathname.endsWith("/version.json") || url.pathname.endsWith("/sw.js")) {
     event.respondWith(networkFirst(request));
     return;
   }
-
   event.respondWith(
     caches.match(request).then(cached => cached || fetch(request).then(response => {
       if (response && response.ok) {
